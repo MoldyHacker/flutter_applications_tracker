@@ -21,7 +21,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Rock On!',
+      title: 'Tracker!',
       themeMode: ThemeMode.system,
       theme: ThemeData.from(colorScheme: kColorScheme),
       darkTheme: ThemeData.from(colorScheme: kDarkColorScheme),
