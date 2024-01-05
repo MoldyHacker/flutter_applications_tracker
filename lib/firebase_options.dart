@@ -69,6 +69,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '452631860879',
     projectId: 'assignment-tracker-9ad32',
     storageBucket: 'assignment-tracker-9ad32.appspot.com',
+    iosClientId: '452631860879-m34h1ra6apdh24m4re47edj8u2iv5cmu.apps.googleusercontent.com',
     iosBundleId: 'com.example.applicationsTracker',
   );
 }

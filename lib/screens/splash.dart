@@ -1,4 +1,5 @@
 import 'package:applications_tracker/widgets/applications_list.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -23,14 +24,17 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           ],
         ),
-        // actions: [
-        //   IconButton(
-        //     onPressed: () {},
-        //     icon: const Icon(
-        //       Icons.account_circle_outlined,
-        //     ),
-        //   ),
-        // ],
+        actions: [
+          IconButton(
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+            },
+            icon: const Icon(
+              // Icons.account_circle_outlined,
+              Icons.logout_outlined,
+            ),
+          ),
+        ],
       ),
       // drawer: MainDrawer(
       //   onSelectScreen: (String identifier) {},
