@@ -1,12 +1,12 @@
 class Note {
-  final String uid;
+  final String id;
   final String applicationId;
   final String content;
   final DateTime? createdDate;
   final DateTime? updatedDate;
 
   Note({
-    required this.uid,
+    this.id = '',
     required this.applicationId,
     required this.content,
     this.createdDate,
