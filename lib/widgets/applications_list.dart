@@ -15,8 +15,8 @@ class ApplicationsList extends StatefulWidget {
 }
 
 class _ApplicationsListState extends State<ApplicationsList> {
-  final GlobalKey<ExpansionTileCardState> cardA = GlobalKey();
-  final GlobalKey<ExpansionTileCardState> cardB = GlobalKey();
+  // final GlobalKey<ExpansionTileCardState> cardA = GlobalKey();
+  // final GlobalKey<ExpansionTileCardState> cardB = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +31,7 @@ class _ApplicationsListState extends State<ApplicationsList> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: ExpansionTileCard(
-              key: cardA,
-              expandedTextColor: Colors.red,
+              // key: cardA,
               leading: const CircleAvatar(child: Text('A')),
               title: const Text('Tap me!'),
               subtitle: const Text('I expand!'),
@@ -69,7 +68,7 @@ These buttons control the next card down!""",
                     TextButton(
                       style: flatButtonStyle,
                       onPressed: () {
-                        cardB.currentState?.expand();
+                        // cardB.currentState?.expand();
                       },
                       child: const Column(
                         children: <Widget>[
@@ -84,7 +83,7 @@ These buttons control the next card down!""",
                     TextButton(
                       style: flatButtonStyle,
                       onPressed: () {
-                        cardB.currentState?.collapse();
+                        // cardB.currentState?.collapse();
                       },
                       child: const Column(
                         children: <Widget>[
@@ -99,7 +98,7 @@ These buttons control the next card down!""",
                     TextButton(
                       style: flatButtonStyle,
                       onPressed: () {
-                        cardB.currentState?.toggleExpansion();
+                        // cardB.currentState?.toggleExpansion();
                       },
                       child: const Column(
                         children: <Widget>[
@@ -119,7 +118,7 @@ These buttons control the next card down!""",
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: ExpansionTileCard(
-              key: cardB,
+              // key: cardB,
               leading: const CircleAvatar(child: Text('B')),
               title: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
