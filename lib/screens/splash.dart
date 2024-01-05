@@ -10,10 +10,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Row(
@@ -36,12 +34,11 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
         ],
       ),
-      // drawer: MainDrawer(
-      //   onSelectScreen: (String identifier) {},
-      // ),
-
-      // floatingActionButton: const MainFab(),
-
+      drawer: const Drawer(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
       body: const ApplicationsList(),
     );
   }
