@@ -8,7 +8,7 @@ class Organization {
   final String? phoneNumber;
 
   Organization({
-    required this.id,
+    this.id = '',
     required this.name,
     required this.industry,
     this.location,
