@@ -1,3 +1,4 @@
+import 'package:applications_tracker/widgets/application_card/application_card_contact.dart';
 import 'package:applications_tracker/widgets/application_card/application_card_subtitle.dart';
 import 'package:applications_tracker/widgets/application_card/application_card_title.dart';
 import 'package:flutter/material.dart';
@@ -264,84 +265,11 @@ These buttons control the next card down!""",
                   ),
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Row(
-                              children: [
-                                const Icon(Icons.info_outline),
-                                const SizedBox(width: 5),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        applications[0]['contactName'] ??
-                                            'Contact Name',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelLarge,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      Text(
-                                        applications[0]['contactTitle'] ??
-                                            'Contact Title',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: 165,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    const Icon(Icons.contact_phone_outlined),
-                                    const SizedBox(width: 5),
-                                    Expanded(
-                                      child: Text(
-                                        applications[0]['contactPhone'] ??
-                                            'Contact Phone',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelLarge,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    const Icon(Icons.contact_mail_outlined),
-                                    const SizedBox(width: 5),
-                                    Expanded(
-                                      child: Text(
-                                        applications[0]['contactEmail'] ??
-                                            'Contact Email',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelLarge,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
+                      ApplicationCardContact(
+                        contactName: applications[0]['contactName'] ?? 'Name',
+                        contactTitle: applications[0]['contactTitle'] ?? 'Title',
+                        contactPhone: applications[0]['contactPhone'] ?? 'Phone',
+                        contactEmail: applications[0]['contactEmail'] ?? 'Email',
                       ),
                       const SizedBox(height: 10),
                       SizedBox(
