@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "452631860879",
+    "project_id": "assignment-tracker-9ad32",
+    "storage_bucket": "assignment-tracker-9ad32.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:452631860879:android:4fe4a7b9d1eaf5243302fa",
+        "android_client_info": {
+          "package_name": "com.example.applications_tracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkijABxYbv-PrCxk7jm0G9xRRIvX170KA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
