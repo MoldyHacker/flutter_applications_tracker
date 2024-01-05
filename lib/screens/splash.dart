@@ -1,10 +1,31 @@
 import 'package:flutter/material.dart';
 
-class SplashScreen extends StatelessWidget {
+import 'package:expansion_tile_card/expansion_tile_card.dart';
+
+final List<String> entries = <String>['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+final List<int> colorCodes = <int>[600, 500, 100];
+double itemHeight = 50.0;
+double listViewHeight = 3 * itemHeight;
+
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  final GlobalKey<ExpansionTileCardState> cardA = GlobalKey();
+  final GlobalKey<ExpansionTileCardState> cardB = GlobalKey();
+
+  @override
   Widget build(BuildContext context) {
+    final ButtonStyle flatButtonStyle = TextButton.styleFrom(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+      ),
+    );
+    
     return Scaffold(
       appBar: AppBar(
         title: const Row(
@@ -29,7 +50,7 @@ class SplashScreen extends StatelessWidget {
       // ),
 
       // floatingActionButton: const MainFab(),
-      
+
       // body: const SingleChildScrollView(
       //   child: Padding(
       //     padding: EdgeInsets.all(10.0),
@@ -37,7 +58,7 @@ class SplashScreen extends StatelessWidget {
       //   ),
       // ),
 
-body: ListView(
+      body: ListView(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -406,7 +427,6 @@ These buttons control the next card down!""",
           ),
         ],
       ),
-
     );
   }
 }
