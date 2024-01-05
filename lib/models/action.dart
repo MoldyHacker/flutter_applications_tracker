@@ -26,7 +26,7 @@ class Action {
   final String? result;
 
   Action({
-    required this.id,
+    this.id = '',
     required this.applicationId,
     required this.actionType,
     required this.date,
