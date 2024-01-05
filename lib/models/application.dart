@@ -10,12 +10,12 @@ enum Status {
 }
 
 class Application {
-  String id;
-  String jobPositionId;
-  Status status;
-  DateTime? dateApplied;
-  String? resumeId;
-  String? coverLetter;
+  final String id;
+  final String jobPositionId;
+  final Status status;
+  final DateTime? dateApplied;
+  final String? resumeId;
+  final String? coverLetter;
 
   Application({
     this.id = '',
