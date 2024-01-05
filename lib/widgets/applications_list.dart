@@ -267,60 +267,60 @@ These buttons control the next card down!""",
                     children: [
                       ApplicationCardContact(
                         contactName: applications[0]['contactName'] ?? 'Name',
-                        contactTitle: applications[0]['contactTitle'] ?? 'Title',
-                        contactPhone: applications[0]['contactPhone'] ?? 'Phone',
-                        contactEmail: applications[0]['contactEmail'] ?? 'Email',
+                        contactTitle:
+                            applications[0]['contactTitle'] ?? 'Title',
+                        contactPhone:
+                            applications[0]['contactPhone'] ?? 'Phone',
+                        contactEmail:
+                            applications[0]['contactEmail'] ?? 'Email',
                       ),
                       const SizedBox(height: 10),
                       SizedBox(
                         height: listViewHeight,
                         child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: entries.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Container(
-                                height: itemHeight,
-                                color: Theme.of(context).highlightColor,
-                                child: Center(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 8),
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                actionItems[0]['date'] ??
-                                                    'Date',
+                          shrinkWrap: true,
+                          itemCount: entries.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              height: itemHeight,
+                              color: Theme.of(context).highlightColor,
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(left: 8),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              actionItems[0]['date'] ?? 'Date',
+                                            ),
+                                            const SizedBox(width: 5),
+                                            Expanded(
+                                              child: Text(
+                                                actionItems[0]['description'] ??
+                                                    'Description',
+                                                overflow: TextOverflow.ellipsis,
                                               ),
-                                              const SizedBox(width: 5),
-                                              Expanded(
-                                                child: Text(
-                                                  actionItems[0]
-                                                          ['description'] ??
-                                                      'Description',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Icons.keyboard_arrow_right_outlined,
-                                        ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.keyboard_arrow_right_outlined,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                              );
-                            }),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ],
                   ),
