@@ -41,7 +41,7 @@ class _NewApplicationState extends State<NewApplication> {
   Widget build(BuildContext context) {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
     return LayoutBuilder(builder: (ctx, contraints) {
-      final width = contraints.maxWidth;
+      // final width = contraints.maxWidth;
 
       return SizedBox(
         height: double.infinity,
@@ -49,7 +49,34 @@ class _NewApplicationState extends State<NewApplication> {
           child: Padding(
             padding: EdgeInsets.fromLTRB(16, 16, 16, keyboardSpace + 16),
             child: Column(
-              children: [],
+              children: [
+                TextField(
+                  controller: _companyNameController,
+                  maxLength: 50,
+                  decoration: const InputDecoration(
+                    label: Text('Company Name'),
+                  ),
+                ),
+                TextField(
+                  controller: _positionTitleController,
+                  maxLength: 50,
+                  decoration: const InputDecoration(
+                    label: Text('Position Title'),
+                  ),
+                ),
+                Row(
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: const Text('Save Application'),
+                    ),
+                  ],
+                )
+              ],
             ),
           ),
         ),
