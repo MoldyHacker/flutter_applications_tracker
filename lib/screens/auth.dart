@@ -40,6 +40,7 @@ class _AuthScreenState extends State<AuthScreen> {
             .doc(userCredentials.user!.uid)
             .set({
           'email': _enteredEmail,
+          'displayName': userCredentials.user!.displayName,
         });
       }
     } on FirebaseAuthException catch (e) {
