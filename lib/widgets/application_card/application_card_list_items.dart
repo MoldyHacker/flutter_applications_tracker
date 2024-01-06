@@ -37,12 +37,12 @@ class ApplicationCardListItems extends StatelessWidget {
                           child: Row(
                             children: [
                               Text(
-                                listItems[0]['date'] ?? 'Date',
+                                listItems[index]['date'] ?? 'Date',
                               ),
                               const SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  listItems[0]['description'] ?? 'Description',
+                                  listItems[index]['description'] ?? 'Description',
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),

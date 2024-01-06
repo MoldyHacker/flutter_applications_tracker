@@ -1,4 +1,5 @@
 import 'package:applications_tracker/widgets/application_card/application_card_contact.dart';
+import 'package:applications_tracker/widgets/application_card/application_card_list_items.dart';
 import 'package:applications_tracker/widgets/application_card/application_card_subtitle.dart';
 import 'package:applications_tracker/widgets/application_card/application_card_title.dart';
 import 'package:flutter/material.dart';
@@ -10,15 +11,15 @@ final List<int> colorCodes = <int>[600, 500, 100];
 final List<Map<String, String>> actionItems = [
   {
     'date': '12/4/23',
-    'description': 'Action Item',
+    'description': 'Action Item1',
   },
   {
     'date': '12/4/23',
-    'description': 'Action Item',
+    'description': 'Action Item2',
   },
   {
     'date': '12/4/23',
-    'description': 'Action Item',
+    'description': 'Action Item3',
   },
   {
     'date': '12/4/23',
@@ -127,7 +128,7 @@ final List<Map<String, String>> applications = [
 ];
 
 double itemHeight = 50.0;
-double listViewHeight = 3 * itemHeight;
+double displayedItems = 3;
 
 class ApplicationsList extends StatefulWidget {
   const ApplicationsList({super.key});
@@ -275,52 +276,11 @@ These buttons control the next card down!""",
                             applications[0]['contactEmail'] ?? 'Email',
                       ),
                       const SizedBox(height: 10),
-                      SizedBox(
-                        height: listViewHeight,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: entries.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Container(
-                              height: itemHeight,
-                              color: Theme.of(context).highlightColor,
-                              child: Center(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 8),
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              actionItems[0]['date'] ?? 'Date',
-                                            ),
-                                            const SizedBox(width: 5),
-                                            Expanded(
-                                              child: Text(
-                                                actionItems[0]['description'] ??
-                                                    'Description',
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(
-                                        Icons.keyboard_arrow_right_outlined,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
+                      ApplicationCardListItems(
+                        listItems: actionItems,
+                        onPressed: () {},
+                        itemHeight: itemHeight,
+                        displayedItems: displayedItems,
                       ),
                     ],
                   ),
