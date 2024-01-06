@@ -1,6 +1,5 @@
 import 'package:applications_tracker/widgets/applications_list.dart';
 import 'package:applications_tracker/widgets/main_drawer.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ApplicationsScreen extends StatefulWidget {
@@ -21,6 +20,8 @@ class _ApplicationsScreenState extends State<ApplicationsScreen> {
 
   _openAddApplicationOverlay() {
     showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
         context: context,
         builder: (ctx) {
           return const Text('Add Application');
@@ -41,7 +42,7 @@ class _ApplicationsScreenState extends State<ApplicationsScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: _openAddApplicationOverlay,
             icon: const Icon(
               Icons.add,
             ),
