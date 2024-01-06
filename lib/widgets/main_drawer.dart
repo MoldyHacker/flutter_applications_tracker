@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class MainDrawer extends StatelessWidget {
@@ -8,53 +9,94 @@ class MainDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        DrawerHeader(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Theme.of(context).colorScheme.primaryContainer,
-                Theme.of(context).colorScheme.primaryContainer.withOpacity(0.8),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+        Column(
+          children: [
+            DrawerHeader(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.primaryContainer,
+                    Theme.of(context).colorScheme.primaryContainer.withOpacity(0.8),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.list_alt_outlined,
+                        size: 48,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const SizedBox(
+                        width: 18,
+                      ),
+                      Text(
+                        'Track\'r',
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                      ),
+                    ],
+                  ),
+                  // TextButton(
+                  //   onPressed: () {
+                  //     FirebaseAuth.instance.signOut();
+                  //   },
+                  //   child: const Row(
+                  //     children: [
+                  //       Text('Sign out'),
+                  //       SizedBox(
+                  //         width: 8,
+                  //       ),
+                  //       Icon(Icons.logout_outlined),
+                  //     ],
+                  //   ),
+                  // ),
+                ],
+              ),
             ),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                Icons.list_alt_outlined,
-                size: 48,
-                color: Theme.of(context).colorScheme.primary,
+            ListTile(
+              leading: Icon(
+                Icons.message_outlined,
+                size: 26,
+                color: Theme.of(context).colorScheme.onBackground,
               ),
-              const SizedBox(
-                width: 18,
-              ),
-              Text(
-                'Track\'r',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
+              title: Text(
+                'Active Applications',
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                      color: Theme.of(context).colorScheme.onBackground,
+                      fontSize: 24,
                     ),
               ),
-            ],
-          ),
+              onTap: () {
+                onSelectScreen('active-applications');
+              },
+            ),
+          ],
         ),
         ListTile(
           leading: Icon(
-            Icons.message_outlined,
+            Icons.logout_outlined,
             size: 26,
             color: Theme.of(context).colorScheme.onBackground,
           ),
           title: Text(
-            'Active Applications',
+            'Sign out',
             style: Theme.of(context).textTheme.titleSmall!.copyWith(
                   color: Theme.of(context).colorScheme.onBackground,
-                  fontSize: 24,
+                  fontSize: 14,
                 ),
           ),
           onTap: () {
-            onSelectScreen('active-applications');
+            FirebaseAuth.instance.signOut();
           },
         ),
       ],
