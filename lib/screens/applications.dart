@@ -11,9 +11,20 @@ class ApplicationsScreen extends StatefulWidget {
 }
 
 class _ApplicationsScreenState extends State<ApplicationsScreen> {
-
-    void _setScreen(String identifier) async {
+  void _setScreen(String identifier) async {
     Navigator.of(context).pop();
+  }
+
+  // _openAddApplicationScreen() {
+  //   Navigator.of(context).pushNamed('/add-application');
+  // }
+
+  _openAddApplicationOverlay() {
+    showModalBottomSheet(
+        context: context,
+        builder: (ctx) {
+          return const Text('Add Application');
+        });
   }
 
   @override
@@ -30,21 +41,14 @@ class _ApplicationsScreenState extends State<ApplicationsScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-            },
+            onPressed: () {},
             icon: const Icon(
-              // Icons.account_circle_outlined,
-              Icons.logout_outlined,
+              Icons.add,
             ),
           ),
         ],
       ),
       drawer: MainDrawer(onSelectScreen: _setScreen),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
-      ),
       body: const ApplicationsList(),
     );
   }
