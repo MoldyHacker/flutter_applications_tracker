@@ -16,7 +16,7 @@ class _NewApplicationState extends State<NewApplication> {
 
   DateTime? _dateApplied;
 
-    void _presentDatePicker() async {
+  void _presentDatePicker() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 1, now.month, now.day);
     final pickedDate = await showDatePicker(
@@ -30,11 +30,30 @@ class _NewApplicationState extends State<NewApplication> {
     });
   }
 
+  @override
+  void dispose() {
+    _companyNameController.dispose();
+    _positionTitleController.dispose();
+    super.dispose();
+  }
 
-
-@override
+  @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
+    return LayoutBuilder(builder: (ctx, contraints) {
+      final width = contraints.maxWidth;
+
+      return SizedBox(
+        height: double.infinity,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(16, 16, 16, keyboardSpace + 16),
+            child: Column(
+              children: [],
+            ),
+          ),
+        ),
+      );
+    });
   }
 }
