@@ -1,5 +1,7 @@
+import 'package:applications_tracker/models/application.dart';
 import 'package:applications_tracker/widgets/applications_list.dart';
 import 'package:applications_tracker/widgets/main_drawer.dart';
+import 'package:applications_tracker/widgets/new_application.dart';
 import 'package:flutter/material.dart';
 
 class ApplicationsScreen extends StatefulWidget {
@@ -23,9 +25,35 @@ class _ApplicationsScreenState extends State<ApplicationsScreen> {
       useSafeArea: true,
       isScrollControlled: true,
         context: context,
-        builder: (ctx) {
-          return const Text('Add Application');
-        });
+        builder: (ctx) => NewApplication(onAddApplication: _addApplication));
+  }
+
+  void _addApplication(Application application) {
+    setState(() {
+      // _activeApplications.add(application);
+    });
+  }
+
+  void _removeApplication(String id) {
+    setState(() {
+      // _archivedApplications.add(application);
+      // _activeApplications.removeWhere((application) => application.id == id);
+    });
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 3),
+        content: const Text('Application Archived.'),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () {
+            setState(() {
+              // _registeredApplications.insert(applicationIndex, application);
+            });
+          },
+        ),
+      ),
+    );
   }
 
   @override
