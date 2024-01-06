@@ -22,24 +22,10 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           ],
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-            },
-            icon: const Icon(
-              // Icons.account_circle_outlined,
-              Icons.logout_outlined,
-            ),
-          ),
-        ],
       ),
-      drawer: const Drawer(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
-      ),
-      body: const ApplicationsList(),
+      body: const Center(
+        child: CircularProgressIndicator(),
+      )
     );
   }
 }
