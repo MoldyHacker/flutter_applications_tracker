@@ -1,7 +1,7 @@
 class Organization {
   final String id;
   final String name;
-  final String industry;
+  final String? industry;
   final String? location;
   final String? email;
   final String? website;
@@ -10,7 +10,7 @@ class Organization {
   Organization({
     this.id = '',
     required this.name,
-    required this.industry,
+    this.industry,
     this.location,
     this.email,
     this.website,
