@@ -1,3 +1,4 @@
+import 'package:applications_tracker/screens/applications.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -42,7 +43,7 @@ class MainApp extends StatelessWidget {
           }
 
           if (snapshot.hasData) {
-            return const SplashScreen();
+            return const ApplicationsScreen();
           }
 
           return const AuthScreen();
