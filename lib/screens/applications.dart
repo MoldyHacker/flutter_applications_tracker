@@ -2,6 +2,7 @@ import 'package:applications_tracker/models/application.dart';
 import 'package:applications_tracker/widgets/applications_list.dart';
 import 'package:applications_tracker/widgets/main_drawer.dart';
 import 'package:applications_tracker/widgets/new_application.dart';
+// import 'package:applications_tracker/widgets/test.dart';
 import 'package:flutter/material.dart';
 
 class ApplicationsScreen extends StatefulWidget {
@@ -24,8 +25,9 @@ class _ApplicationsScreenState extends State<ApplicationsScreen> {
     showModalBottomSheet(
       useSafeArea: true,
       isScrollControlled: true,
-        context: context,
-        builder: (ctx) => NewApplication(onAddApplication: _addApplication));
+      context: context,
+      builder: (ctx) => NewApplication(onAddApplication: _addApplication),
+    );
   }
 
   void _addApplication(Application application) {
