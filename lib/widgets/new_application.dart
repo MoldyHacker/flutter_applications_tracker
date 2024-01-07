@@ -65,6 +65,21 @@ class _NewApplicationState extends State<NewApplication> {
                   ),
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: _presentDatePicker,
+                      icon: const Icon(Icons.calendar_month_outlined),
+                    ),
+                    Text(
+                      _dateApplied == null
+                          ? 'No date selected'
+                          : formatter.format(_dateApplied!),
+                    ),
+                  ],
+                ),
+                Row(
                   children: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
