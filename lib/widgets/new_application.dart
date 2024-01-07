@@ -11,10 +11,12 @@ class NewApplication extends StatefulWidget {
 }
 
 class _NewApplicationState extends State<NewApplication> {
-  final _companyNameController = TextEditingController();
+  final _organizationNameController = TextEditingController();
   final _positionTitleController = TextEditingController();
 
-  DateTime? _dateApplied;
+  DateTime? _dateApplied = DateTime.now();
+
+  int _currentStep = 0;
 
   void _presentDatePicker() async {
     final now = DateTime.now();
@@ -30,9 +32,78 @@ class _NewApplicationState extends State<NewApplication> {
     });
   }
 
+  List<Step> _getSteps() {
+    return [
+      Step(
+        title: const Text('Organization'),
+        content: Container(
+          padding: const EdgeInsets.only(top: 5),
+          width: double.infinity,
+          child: DropdownMenu(
+            controller: _organizationNameController,
+            requestFocusOnTap: true,
+            enableFilter: true,
+            width: 320,
+            label: const Text('Organization Name'),
+            dropdownMenuEntries: const [
+              DropdownMenuEntry(
+                label: 'Google',
+                value: 'Google',
+              ),
+              DropdownMenuEntry(
+                label: 'Facebook',
+                value: 'Facebook',
+              ),
+              DropdownMenuEntry(
+                label: 'Amazon',
+                value: 'Amazon',
+              ),
+            ],
+          ),
+        ),
+
+        // TextField(
+        //   controller: _organizationNameController,
+        //   maxLength: 50,
+        //   decoration: const InputDecoration(labelText: 'Organization Name'),
+        // ),
+        isActive: _currentStep >= 0,
+        state: _currentStep > 0 ? StepState.complete : StepState.indexed,
+      ),
+      Step(
+        title: const Text('Position'),
+        content: TextField(
+          controller: _positionTitleController,
+          maxLength: 50,
+          decoration: const InputDecoration(labelText: 'Position Title'),
+        ),
+        isActive: _currentStep >= 1,
+        state: _currentStep > 1 ? StepState.complete : StepState.indexed,
+      ),
+      Step(
+        title: const Text('Date Applied'),
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.calendar_month_outlined),
+              onPressed: _presentDatePicker,
+            ),
+            Text(_dateApplied == null
+                ? _dateApplied.toString()
+                : formatter.format(_dateApplied!)),
+          ],
+        ),
+        isActive: _currentStep >= 2,
+        state: _currentStep > 2 ? StepState.complete : StepState.indexed,
+      ),
+    ];
+  }
+
   @override
   void dispose() {
-    _companyNameController.dispose();
+    _organizationNameController.dispose();
     _positionTitleController.dispose();
     super.dispose();
   }
@@ -45,55 +116,53 @@ class _NewApplicationState extends State<NewApplication> {
 
       return SizedBox(
         height: double.infinity,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(16, 16, 16, keyboardSpace + 16),
-            child: Column(
-              children: [
-                TextField(
-                  controller: _companyNameController,
-                  maxLength: 50,
-                  decoration: const InputDecoration(
-                    label: Text('Company Name'),
-                  ),
-                ),
-                TextField(
-                  controller: _positionTitleController,
-                  maxLength: 50,
-                  decoration: const InputDecoration(
-                    label: Text('Position Title'),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: _presentDatePicker,
-                      icon: const Icon(Icons.calendar_month_outlined),
+        child: Column(
+          children: [
+            // Padding(
+            //   padding: EdgeInsets.fromLTRB(0, 16, 16, keyboardSpace + 16),
+            //   child:
+            Flexible(
+              child: Stepper(
+                // type: StepperType.horizontal,
+                physics: const ClampingScrollPhysics(),
+                currentStep: _currentStep,
+                onStepCancel: () {
+                  if (_currentStep > 0) {
+                    setState(() => _currentStep -= 1);
+                  }
+                },
+                onStepContinue: () {
+                  if (_currentStep < _getSteps().length - 1) {
+                    setState(() => _currentStep++);
+                  }
+                },
+                onStepTapped: (step) => setState(() => _currentStep = step),
+                steps: _getSteps(),
+                controlsBuilder:
+                    (BuildContext context, ControlsDetails details) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        TextButton(
+                          onPressed: details.onStepCancel,
+                          child: const Text('Back'),
+                        ),
+                        ElevatedButton(
+                          onPressed: details.onStepContinue,
+                          child: _currentStep == _getSteps().length - 1
+                              ? const Text('Finish')
+                              : const Text('Next'),
+                        ),
+                      ],
                     ),
-                    Text(
-                      _dateApplied == null
-                          ? 'No date selected'
-                          : formatter.format(_dateApplied!),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: const Text('Save Application'),
-                    ),
-                  ],
-                )
-              ],
+                  );
+                },
+              ),
             ),
-          ),
+            // ),
+          ],
         ),
       );
     });
