@@ -1,6 +1,21 @@
 import 'package:applications_tracker/models/application.dart';
 import 'package:flutter/material.dart';
 
+List<DropdownMenuEntry> organizationsList = const [
+              DropdownMenuEntry(
+                label: 'Google',
+                value: 'Google',
+              ),
+              DropdownMenuEntry(
+                label: 'Facebook',
+                value: 'Facebook',
+              ),
+              DropdownMenuEntry(
+                label: 'Amazon',
+                value: 'Amazon',
+              )
+            ];
+
 class NewApplication extends StatefulWidget {
   const NewApplication({super.key, required this.onAddApplication});
 
@@ -45,28 +60,9 @@ class _NewApplicationState extends State<NewApplication> {
             enableFilter: true,
             width: 320,
             label: const Text('Organization Name'),
-            dropdownMenuEntries: const [
-              DropdownMenuEntry(
-                label: 'Google',
-                value: 'Google',
-              ),
-              DropdownMenuEntry(
-                label: 'Facebook',
-                value: 'Facebook',
-              ),
-              DropdownMenuEntry(
-                label: 'Amazon',
-                value: 'Amazon',
-              ),
-            ],
+            dropdownMenuEntries: organizationsList,
           ),
         ),
-
-        // TextField(
-        //   controller: _organizationNameController,
-        //   maxLength: 50,
-        //   decoration: const InputDecoration(labelText: 'Organization Name'),
-        // ),
         isActive: _currentStep >= 0,
         state: _currentStep > 0 ? StepState.complete : StepState.indexed,
       ),
@@ -110,7 +106,7 @@ class _NewApplicationState extends State<NewApplication> {
 
   @override
   Widget build(BuildContext context) {
-    final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
+    // final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
     return LayoutBuilder(builder: (ctx, contraints) {
       // final width = contraints.maxWidth;
 
