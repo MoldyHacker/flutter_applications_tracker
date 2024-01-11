@@ -2,19 +2,34 @@ import 'package:applications_tracker/models/application.dart';
 import 'package:flutter/material.dart';
 
 List<DropdownMenuEntry> organizationsList = const [
-              DropdownMenuEntry(
-                label: 'Google',
-                value: 'Google',
-              ),
-              DropdownMenuEntry(
-                label: 'Facebook',
-                value: 'Facebook',
-              ),
-              DropdownMenuEntry(
-                label: 'Amazon',
-                value: 'Amazon',
-              )
-            ];
+  DropdownMenuEntry(
+    label: 'Google',
+    value: 'Google',
+  ),
+  DropdownMenuEntry(
+    label: 'Facebook',
+    value: 'Facebook',
+  ),
+  DropdownMenuEntry(
+    label: 'Amazon',
+    value: 'Amazon',
+  )
+];
+
+List<DropdownMenuEntry> applicationMethodsList = const [
+  DropdownMenuEntry(
+    label: 'Online',
+    value: 'Online',
+  ),
+  DropdownMenuEntry(
+    label: 'Email',
+    value: 'Email',
+  ),
+  DropdownMenuEntry(
+    label: 'In Person',
+    value: 'In Person',
+  )
+];
 
 class NewApplication extends StatefulWidget {
   const NewApplication({super.key, required this.onAddApplication});
@@ -28,6 +43,7 @@ class NewApplication extends StatefulWidget {
 class _NewApplicationState extends State<NewApplication> {
   final _organizationNameController = TextEditingController();
   final _positionTitleController = TextEditingController();
+  final _applicationMethodController = TextEditingController();
 
   DateTime? _dateApplied = DateTime.now();
 
@@ -77,18 +93,40 @@ class _NewApplicationState extends State<NewApplication> {
         state: _currentStep > 1 ? StepState.complete : StepState.indexed,
       ),
       Step(
-        title: const Text('Date Applied'),
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        title: const Text('Application Info'),
+        content: Column(
           children: [
-            IconButton(
-              icon: const Icon(Icons.calendar_month_outlined),
-              onPressed: _presentDatePicker,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.calendar_month_outlined),
+                  onPressed: _presentDatePicker,
+                ),
+                Text(_dateApplied == null
+                    ? _dateApplied.toString()
+                    : formatter.format(_dateApplied!)),
+              ],
             ),
-            Text(_dateApplied == null
-                ? _dateApplied.toString()
-                : formatter.format(_dateApplied!)),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Text(
+                'Optional',
+              ),
+            ),
+            Container(
+          padding: const EdgeInsets.only(top: 5),
+          width: double.infinity,
+          child: DropdownMenu(
+            controller: _applicationMethodController,
+            requestFocusOnTap: true,
+            enableFilter: true,
+            width: 320,
+            label: const Text('Application Method'),
+            dropdownMenuEntries: applicationMethodsList,
+          ),
+        ),
           ],
         ),
         isActive: _currentStep >= 2,
