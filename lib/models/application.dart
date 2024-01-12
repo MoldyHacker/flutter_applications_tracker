@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 enum Status {
@@ -32,5 +33,27 @@ class Application {
 
   get formattedDateApplied {
     return formatter.format(dateApplied);
+  }
+
+  factory Application.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options) {
+    final data = snapshot.data()!;
+    return Application(
+      id: snapshot.id,
+      jobPositionId: data['jobPositionId'],
+      dateApplied: data['dateApplied'].toDate(),
+      status: Status.values[data['status']],
+      // resumeId: data['resumeId'],
+      // coverLetter: data['coverLetter'],
+    );
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      'jobPositionId': jobPositionId,
+      'dateApplied': dateApplied,
+      'status': status.index,
+      // 'resumeId': resumeId,
+      // 'coverLetter': coverLetter,
+    };
   }
 }
