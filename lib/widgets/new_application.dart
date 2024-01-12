@@ -91,9 +91,13 @@ class _NewApplicationState extends State<NewApplication> {
   // Add the organization to the database and return the document id
   Future<String> _addOrganization() async {
     Organization organization = Organization(
-      name: _organizationNameController.text,
-      location: _organizationLocationController.text,
-      website: _organizationWebsiteController.text,
+      name: _organizationNameController.text.trim(),
+      location: _organizationLocationController.text.isNotEmpty
+          ? _organizationLocationController.text.trim()
+          : null,
+      website: _organizationWebsiteController.text.isNotEmpty
+          ? _organizationWebsiteController.text.trim()
+          : null,
     );
     DocumentReference docRef = await db
         .collection('users/$authUid/organizations')
@@ -106,14 +110,18 @@ class _NewApplicationState extends State<NewApplication> {
   Future<String> _addPosition() async {
     String organizationDocumentId = await _getOrganizationDocumentId();
     JobPosition position = JobPosition(
-      title: _positionTitleController.text,
+      title: _positionTitleController.text.trim(),
       organizationId: organizationDocumentId,
-      jobType: JobType.values.byName(_positionType.type),
+      jobType: JobType.values.byName(_positionType.name),
       workplaceSetting:
-          WorkplaceSetting.values.byName(_positionSettingType.setting),
-      wageType: WageType.values.byName(_positionWageType.type),
-      wageLowerBound: double.tryParse(_positionWageLowerBoundController.text),
-      wageUpperBound: double.tryParse(_positionWageUpperBoundController.text),
+          WorkplaceSetting.values.byName(_positionSettingType.name),
+      wageType: WageType.values.byName(_positionWageType.name),
+      wageLowerBound: _positionWageLowerBoundController.text.isNotEmpty
+          ? double.tryParse(_positionWageLowerBoundController.text)
+          : null,
+      wageUpperBound: _positionWageUpperBoundController.text.isNotEmpty
+          ? double.tryParse(_positionWageUpperBoundController.text)
+          : null,
     );
     DocumentReference docRef = await db
         .collection('users/$authUid/positions')
@@ -138,21 +146,39 @@ class _NewApplicationState extends State<NewApplication> {
     return docRef.id;
   }
 
-  Future<bool> _validateFormAndAddApplication() async {
-    if (_organizationNameController.text.length < 3 &&
+  Future<String?> _validateFormAndAddApplication() async {
+    String helpText = 'Please fill in all required fields. \n\n';
+    bool formIsValid = true;
+
+    if (_organizationNameController.text.length < 3 ||
         _organizationNameController.text.length > 50) {
       _organizationNameIsValid = false;
-      return false;
+      formIsValid = false;
+      helpText += 'Organization name must be between 3 and 50 characters. \n';
+    } else {
+      _organizationNameIsValid = true;
     }
-    if (_formKey.currentState!.validate()) {
-      return false;
+    if (!_formKey.currentState!.validate()) {
+      formIsValid = false;
+      helpText += 'Position title must be between 3 and 50 characters. \n';
     }
-    String docRef = await _addApplication();
-    if (docRef.isNotEmpty) {
-      // Navigator.of(context).pop();
-      return true;
+    if (!formIsValid) {
+      showAdaptiveDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Entry Error'),
+          content: Text(helpText),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+      return null;
     }
-    return false;
+    return await _addApplication();
   }
 
   List<Step> _getSteps() {
@@ -454,11 +480,9 @@ class _NewApplicationState extends State<NewApplication> {
                   if (_currentStep < _getSteps().length - 1) {
                     setState(() => _currentStep++);
                   } else {
-                    _formKey.currentState!.save();
-                    if (await _validateFormAndAddApplication()) {
-                      return;
+                    if (await _validateFormAndAddApplication() != null) {
+                      navigator.pop();
                     }
-                    navigator.pop();
                   }
                 },
                 onStepTapped: (step) => setState(() => _currentStep = step),
