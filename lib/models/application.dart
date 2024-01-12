@@ -1,3 +1,5 @@
+import 'dart:js_interop_unsafe';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
@@ -52,8 +54,8 @@ class Application {
       'jobPositionId': jobPositionId,
       'dateApplied': dateApplied,
       'status': status.index,
-      // 'resumeId': resumeId,
-      // 'coverLetter': coverLetter,
+      'resumeId': resumeId ?? FieldValue.delete(),
+      'coverLetter': coverLetter ?? FieldValue.delete(),
     };
   }
 }
