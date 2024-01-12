@@ -47,29 +47,28 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCdSQzl_TrbmMUXgbhrcHI3cEtganTJukE',
-    appId: '1:452631860879:web:0424547f311101863302fa',
-    messagingSenderId: '452631860879',
-    projectId: 'assignment-tracker-9ad32',
-    authDomain: 'assignment-tracker-9ad32.firebaseapp.com',
-    storageBucket: 'assignment-tracker-9ad32.appspot.com',
+    apiKey: 'AIzaSyDmMarJ1a89dzREfz3gVAyUA-kXVHvyPRI',
+    appId: '1:954358220128:web:2eab08397ace4e48d3ca05',
+    messagingSenderId: '954358220128',
+    projectId: 'application-tracker-1d9a0',
+    authDomain: 'application-tracker-1d9a0.firebaseapp.com',
+    storageBucket: 'application-tracker-1d9a0.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDkijABxYbv-PrCxk7jm0G9xRRIvX170KA',
-    appId: '1:452631860879:android:4fe4a7b9d1eaf5243302fa',
-    messagingSenderId: '452631860879',
-    projectId: 'assignment-tracker-9ad32',
-    storageBucket: 'assignment-tracker-9ad32.appspot.com',
+    apiKey: 'AIzaSyBrM39aYOb_QhoW00Y-sTXHh3jmk0kotfc',
+    appId: '1:954358220128:android:93a1ae721fbfdf1cd3ca05',
+    messagingSenderId: '954358220128',
+    projectId: 'application-tracker-1d9a0',
+    storageBucket: 'application-tracker-1d9a0.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBLnZSQ-w9y02ZdTJYkMkx_guiH-Q8ZBzI',
-    appId: '1:452631860879:ios:b1d98bc1fb98c3fb3302fa',
-    messagingSenderId: '452631860879',
-    projectId: 'assignment-tracker-9ad32',
-    storageBucket: 'assignment-tracker-9ad32.appspot.com',
-    iosClientId: '452631860879-m34h1ra6apdh24m4re47edj8u2iv5cmu.apps.googleusercontent.com',
+    apiKey: 'AIzaSyC8Y3JPSdJfFcqt-bTLad7d5eY0wBbnWHk',
+    appId: '1:954358220128:ios:b8011b4d6d39c9b9d3ca05',
+    messagingSenderId: '954358220128',
+    projectId: 'application-tracker-1d9a0',
+    storageBucket: 'application-tracker-1d9a0.appspot.com',
     iosBundleId: 'com.example.applicationsTracker',
   );
 }
