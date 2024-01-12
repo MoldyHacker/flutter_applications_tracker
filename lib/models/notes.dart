@@ -30,8 +30,8 @@ class Note {
     return {
       'applicationId': applicationId,
       'content': content,
-      'createdDate': createdDate ?? FieldValue.delete(),
-      'updatedDate': updatedDate ?? FieldValue.delete(),
+      if (createdDate != null) 'createdDate': createdDate,
+      if (updatedDate != null) 'updatedDate': updatedDate,
     };
   }
 }
