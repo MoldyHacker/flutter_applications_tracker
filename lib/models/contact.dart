@@ -25,10 +25,10 @@ class Contact {
       id: snapshot.id,
       name: data['name'] ?? '',
       title: data['title'] ?? '',
-      email: data['email'] ?? '',
-      phone: data['phone'] ?? '',
-      linkedInUrl: data['linkedInUrl'] ?? '',
-      organizationId: data['organizationId'] ?? '',
+      email: data['email'],
+      phone: data['phone'],
+      linkedInUrl: data['linkedInUrl'],
+      organizationId: data['organizationId'],
     );
   }
 
@@ -36,10 +36,10 @@ class Contact {
     return {
       'name': name,
       'title': title,
-      'email': email,
-      'phone': phone,
-      'linkedInUrl': linkedInUrl,
-      'organizationId': organizationId,
+      'email': email ?? FieldValue.delete(),
+      'phone': phone ?? FieldValue.delete(),
+      'linkedInUrl': linkedInUrl ?? FieldValue.delete(),
+      'organizationId': organizationId ?? FieldValue.delete(),
     };
   }
 }
