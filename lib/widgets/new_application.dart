@@ -47,6 +47,18 @@ class _NewApplicationState extends State<NewApplication> {
 
   int _currentStep = 0;
 
+  @override
+  void dispose() {
+    _organizationNameController.dispose();
+    _positionTitleController.dispose();
+    _applicationMethodController.dispose();
+    super.dispose();
+  }
+
+  void _validate() {
+    _organizationNameController.text.isNotEmpty;
+  }
+
   void _presentDatePicker() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 1, now.month, now.day);
@@ -65,23 +77,31 @@ class _NewApplicationState extends State<NewApplication> {
     return [
       Step(
         title: const Text('Organization'),
-        content: Container(
-          padding: const EdgeInsets.only(top: 5),
-          width: double.infinity,
-          child: DropdownMenu(
-            controller: _organizationNameController,
-            requestFocusOnTap: true,
-            enableFilter: true,
-            width: 320,
-            label: const Text('Organization Name'),
-            dropdownMenuEntries: organizationsList
-                .map<DropdownMenuEntry<String>>((String value) {
-              return DropdownMenuEntry<String>(
-                value: value,
-                label: value,
-              );
-            }).toList(),
-          ),
+        content: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(top: 5),
+              width: double.infinity,
+              child: DropdownMenu(
+                controller: _organizationNameController,
+                requestFocusOnTap: true,
+                enableFilter: true,
+                width: 320,
+                label: const Text('Organization Name'),
+                dropdownMenuEntries: organizationsList
+                    .map<DropdownMenuEntry<String>>((String value) {
+                  return DropdownMenuEntry<String>(
+                    value: value,
+                    label: value,
+                  );
+                }).toList(),
+              ),
+            ),
+            const ExpansionTile(
+              title: Text('Optional'),
+              children: [],
+            ),
+          ],
         ),
         isActive: _currentStep >= 0,
         state: _currentStep > 0 ? StepState.complete : StepState.indexed,
@@ -95,21 +115,25 @@ class _NewApplicationState extends State<NewApplication> {
               maxLength: 50,
               decoration: const InputDecoration(labelText: 'Position Title'),
             ),
-            const Text('Optional'),
-            DropdownButton(
-                value: _positionType,
-                items: positionTypeList
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? value) {
-                  setState(() {
-                    _positionType = value!;
-                  });
-                })
+            ExpansionTile(
+              title: const Text('Optional'),
+              children: [
+                DropdownButton(
+                    value: _positionType,
+                    items: positionTypeList
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      setState(() {
+                        _positionType = value!;
+                      });
+                    })
+              ],
+            ),
           ],
         ),
         isActive: _currentStep >= 1,
@@ -132,29 +156,28 @@ class _NewApplicationState extends State<NewApplication> {
                     : formatter.format(_dateApplied!)),
               ],
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                'Optional',
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.only(top: 5),
-              width: double.infinity,
-              child: DropdownMenu(
-                controller: _applicationMethodController,
-                requestFocusOnTap: true,
-                enableFilter: true,
-                width: 320,
-                label: const Text('Application Method'),
-                dropdownMenuEntries: applicationMethodsList
-                    .map<DropdownMenuEntry<String>>((String value) {
-                  return DropdownMenuEntry<String>(
-                    value: value,
-                    label: value,
-                  );
-                }).toList(),
-              ),
+            ExpansionTile(
+              title: const Text('Optional'),
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(top: 5),
+                  width: double.infinity,
+                  child: DropdownMenu(
+                    controller: _applicationMethodController,
+                    requestFocusOnTap: true,
+                    enableFilter: true,
+                    width: 320,
+                    label: const Text('Application Method'),
+                    dropdownMenuEntries: applicationMethodsList
+                        .map<DropdownMenuEntry<String>>((String value) {
+                      return DropdownMenuEntry<String>(
+                        value: value,
+                        label: value,
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -162,13 +185,6 @@ class _NewApplicationState extends State<NewApplication> {
         state: _currentStep > 2 ? StepState.complete : StepState.indexed,
       ),
     ];
-  }
-
-  @override
-  void dispose() {
-    _organizationNameController.dispose();
-    _positionTitleController.dispose();
-    super.dispose();
   }
 
   @override
