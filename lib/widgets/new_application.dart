@@ -151,6 +151,8 @@ class _NewApplicationState extends State<NewApplication> {
     String positionDocumentId = await _addPosition();
     db.collection('users/${auth.currentUser!.uid}/applications').add({
       'position': positionDocumentId,
+      'positionTitle': _positionTitleController.text,
+      'organization': _organizationNameController.text,
       'dateApplied': _dateApplied,
       'applicationMethod': _applicationMethodController.text,
       'applicationUrl': _applicationUrlController.text,
