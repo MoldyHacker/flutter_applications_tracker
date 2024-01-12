@@ -24,6 +24,7 @@ class _NewApplicationState extends State<NewApplication> {
   final _formKey = GlobalKey<FormState>();
 
   final _organizationNameController = TextEditingController();
+  bool _organizationNameIsValid = true;
   final _organizationLocationController = TextEditingController();
   final _organizationWebsiteController = TextEditingController();
 
@@ -72,7 +73,7 @@ class _NewApplicationState extends State<NewApplication> {
   }
 
   // Retrieve the organization document id if it exists, otherwise add it
-  Future<String> getOrganizationDocumentId() async {
+  Future<String> _getOrganizationDocumentId() async {
     String? documentId;
     db
         .collection('users/$authUid/organizations')
@@ -103,7 +104,7 @@ class _NewApplicationState extends State<NewApplication> {
 
   // Add the position to the database and return the document id
   Future<String> _addPosition() async {
-    String organizationDocumentId = await getOrganizationDocumentId();
+    String organizationDocumentId = await _getOrganizationDocumentId();
     JobPosition position = JobPosition(
       title: _positionTitleController.text,
       organizationId: organizationDocumentId,
@@ -121,7 +122,7 @@ class _NewApplicationState extends State<NewApplication> {
   }
 
   // Add the application to the database
-  void _addApplication() async {
+  Future<String> _addApplication() async {
     String positionDocumentId = await _addPosition();
     Application application = Application(
       jobPositionId: positionDocumentId,
@@ -134,17 +135,24 @@ class _NewApplicationState extends State<NewApplication> {
     DocumentReference docRef = await db
         .collection('users/$authUid/applications')
         .add(application.toFirestore());
-    // return docRef.id;
+    return docRef.id;
   }
 
-  void _validateFormAndAddApplication() {
-    if (_formKey.currentState!.validate()) {
-      if (_organizationNameController.text.isNotEmpty) {
-        _addApplication();
-      }
-      return;
+  Future<bool> _validateFormAndAddApplication() async {
+    if (_organizationNameController.text.length < 3 &&
+        _organizationNameController.text.length > 50) {
+      _organizationNameIsValid = false;
+      return false;
     }
-    return;
+    if (_formKey.currentState!.validate()) {
+      return false;
+    }
+    String docRef = await _addApplication();
+    if (docRef.isNotEmpty) {
+      // Navigator.of(context).pop();
+      return true;
+    }
+    return false;
   }
 
   List<Step> _getSteps() {
@@ -162,6 +170,9 @@ class _NewApplicationState extends State<NewApplication> {
                 enableFilter: true,
                 width: 320,
                 label: const Text('Organization Name'),
+                errorText: _organizationNameIsValid
+                    ? null
+                    : 'Please enter an organization name.',
                 dropdownMenuEntries: organizationsList
                     .map<DropdownMenuEntry<String>>((String value) {
                   return DropdownMenuEntry<String>(
@@ -438,12 +449,16 @@ class _NewApplicationState extends State<NewApplication> {
                     setState(() => _currentStep -= 1);
                   }
                 },
-                onStepContinue: () {
+                onStepContinue: () async {
+                  final navigator = Navigator.of(context);
                   if (_currentStep < _getSteps().length - 1) {
                     setState(() => _currentStep++);
                   } else {
-                    _validateFormAndAddApplication();
-                    Navigator.of(context).pop();
+                    _formKey.currentState!.save();
+                    if (await _validateFormAndAddApplication()) {
+                      return;
+                    }
+                    navigator.pop();
                   }
                 },
                 onStepTapped: (step) => setState(() => _currentStep = step),
