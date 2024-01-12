@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Contact {
   final String id;
   final String name;
@@ -16,4 +18,28 @@ class Contact {
     this.linkedInUrl,
     this.organizationId,
   });
+
+    factory Contact.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options) {
+    final data = snapshot.data()!;
+    return Contact(
+      id: snapshot.id,
+      name: data['name'] ?? '',
+      title: data['title'] ?? '',
+      email: data['email'] ?? '',
+      phone: data['phone'] ?? '',
+      linkedInUrl: data['linkedInUrl'] ?? '',
+      organizationId: data['organizationId'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      'name': name,
+      'title': title,
+      'email': email,
+      'phone': phone,
+      'linkedInUrl': linkedInUrl,
+      'organizationId': organizationId,
+    };
+  }
 }
