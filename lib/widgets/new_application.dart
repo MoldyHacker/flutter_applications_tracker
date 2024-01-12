@@ -134,11 +134,11 @@ class _NewApplicationState extends State<NewApplication> {
     String positionDocumentId = await _addPosition();
     Application application = Application(
       jobPositionId: positionDocumentId,
-      jobTitle: _positionTitleController.text,
-      organizationName: _organizationNameController.text,
+      jobTitle: _positionTitleController.text.trim(),
+      organizationName: _organizationNameController.text.trim(),
       dateApplied: _dateApplied!,
-      applicationMethod: _applicationMethodController.text,
-      applicationUrl: _applicationUrlController.text,
+      applicationMethod: _applicationMethodController.text.trim(),
+      applicationUrl: _applicationUrlController.text.trim(),
     );
     DocumentReference docRef = await db
         .collection('users/$authUid/applications')
