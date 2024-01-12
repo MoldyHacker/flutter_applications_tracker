@@ -1,5 +1,6 @@
 import 'package:applications_tracker/models/application.dart';
 import 'package:applications_tracker/models/job_position.dart';
+import 'package:applications_tracker/models/organization.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -97,13 +98,15 @@ class _NewApplicationState extends State<NewApplication> {
 
   // Add the organization to the database and return the document id
   Future<String> _addOrganization() async {
+    Organization organization = Organization(
+      name: _organizationNameController.text,
+      location: _organizationLocationController.text,
+      website: _organizationWebsiteController.text,
+    );
     DocumentReference docRef = await db
         .collection('users/${auth.currentUser!.uid}/organizations')
-        .add({
-      'name': _organizationNameController.text,
-      'location': _organizationLocationController.text,
-      'website': _organizationWebsiteController.text,
-    });
+        .add(organization.toFirestore());
+
     return docRef.id;
   }
 
