@@ -1,4 +1,6 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 enum ActionType {
   submitted,              // Indicates the job application has been submitted.
   followedUp,             // Used when the applicant has followed up on an application, typically after not hearing back for a while.
@@ -33,4 +35,26 @@ class Action {
     this.description,
     this.result,
   });
+
+  factory Action.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options) {
+    final data = snapshot.data()!;
+    return Action(
+      id: snapshot.id,
+      applicationId: data['applicationId'] ?? '',
+      actionType: ActionType.values[data['actionType']],
+      date: (data['date'] as Timestamp).toDate(),
+      description: data['description'],
+      result: data['result'],
+    );
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      'applicationId': applicationId,
+      'actionType': actionType.index,
+      'date': Timestamp.fromDate(date),
+      'description': description ?? FieldValue.delete(),
+      'result': result ?? FieldValue.delete(),
+    };
+  }
 }
