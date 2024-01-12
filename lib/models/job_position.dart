@@ -3,7 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 enum WorkplaceSetting {
   remote,
   hybrid,
-  inPerson,
+  office,
+  other,
 }
 
 enum JobType {
@@ -11,8 +12,22 @@ enum JobType {
   partTime,
   internship,
   contract,
+  freelance,
   temporary,
+  seasonal,
+  other,
 }
+
+List<String> jobTypeToString = [
+  "Full Time",
+  "Part Time",
+  "Internship",
+  "Contract",
+  "Freelance",
+  "Temporary",
+  "Seasonal",
+  "Other",
+];
 
 enum WageType {
   salary,

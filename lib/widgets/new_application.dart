@@ -1,4 +1,5 @@
 import 'package:applications_tracker/models/application.dart';
+import 'package:applications_tracker/models/job_position.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,45 +7,20 @@ import 'package:flutter/material.dart';
 final db = FirebaseFirestore.instance;
 final auth = FirebaseAuth.instance;
 
+// TODO: Make this list dynamic
 List<String> organizationsList = <String>['Google', 'Facebook'];
 
-List<String> applicationMethodsList = <String>[
-  'Company Website',
-  'LinkedIn',
-  'Indeed',
-  'Glassdoor',
-  'ZipRecruiter',
-  'Monster',
-  'CareerBuilder',
-  'AngelList',
-  'Hired',
-  'Other'
-];
+List<String> positionWageTypeList = WageType.values
+    .map((wageType) => wageType.toString().split('.').last)
+    .toList();
 
-List<String> positionTypeList = <String>[
-  'Full Time',
-  'Part Time',
-  'Internship',
-  'Contractor',
-  'Freelance',
-  'Temporary',
-  'Seasonal',
-  'Other'
-];
+List<String> positionTypeList = JobType.values
+    .map((jobType) => jobType.toString().split('.').last)
+    .toList();
 
-List<String> positionWageTypeList = <String>[
-  'Salary',
-  'Hourly',
-  'Commission',
-  'Other'
-];
-
-List<String> positionSettingTypeList = <String>[
-  'Office',
-  'Remote',
-  'Hybrid',
-  'Other'
-];
+List<String> positionSettingTypeList = WorkplaceSetting.values
+    .map((workplaceSetting) => workplaceSetting.toString().split('.').last)
+    .toList();
 
 class NewApplication extends StatefulWidget {
   const NewApplication({super.key, required this.onAddApplication});
@@ -59,16 +35,16 @@ class _NewApplicationState extends State<NewApplication> {
   final _organizationNameController = TextEditingController();
   final _organizationLocationController = TextEditingController();
   final _organizationWebsiteController = TextEditingController();
+
   final _positionTitleController = TextEditingController();
   final _positionWageLowerBoundController = TextEditingController();
   final _positionWageUpperBoundController = TextEditingController();
-  final _positionSettingTypeController = TextEditingController();
-  final _applicationMethodController = TextEditingController();
-  final _applicationUrlController = TextEditingController();
-
   String _positionType = positionTypeList.first;
   String _positionWageType = positionWageTypeList.first;
   String _positionSettingType = positionSettingTypeList.first;
+
+  final _applicationMethodController = TextEditingController();
+  final _applicationUrlController = TextEditingController();
 
   DateTime? _dateApplied = DateTime.now();
 
@@ -79,10 +55,11 @@ class _NewApplicationState extends State<NewApplication> {
     _organizationNameController.dispose();
     _organizationLocationController.dispose();
     _organizationWebsiteController.dispose();
+
     _positionTitleController.dispose();
     _positionWageLowerBoundController.dispose();
     _positionWageUpperBoundController.dispose();
-    _positionSettingTypeController.dispose();
+
     _applicationMethodController.dispose();
     _applicationUrlController.dispose();
     super.dispose();

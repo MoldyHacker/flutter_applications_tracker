@@ -1,5 +1,3 @@
-import 'dart:js_interop_unsafe';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
@@ -13,6 +11,19 @@ enum Status {
   negotiating,
   drafted,
 }
+
+List<String> applicationMethodsList = <String>[
+  'Company Website',
+  'LinkedIn',
+  'Indeed',
+  'Glassdoor',
+  'ZipRecruiter',
+  'Monster',
+  'CareerBuilder',
+  'AngelList',
+  'Hired',
+  'Other'
+];
 
 final formatter = DateFormat.yMd();
 
