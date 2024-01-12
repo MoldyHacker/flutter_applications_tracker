@@ -34,9 +34,7 @@ enum JobType {
 
 enum WageType {
   salary('Salary'),
-  hourly('Hourly'),
-  commission('Commission'),
-  other('Other');
+  hourly('Hourly');
 
   const WageType(this.type);
 
