@@ -21,6 +21,8 @@ class NewApplication extends StatefulWidget {
 }
 
 class _NewApplicationState extends State<NewApplication> {
+  final _formKey = GlobalKey<FormState>();
+
   final _organizationNameController = TextEditingController();
   final _organizationLocationController = TextEditingController();
   final _organizationWebsiteController = TextEditingController();
@@ -57,6 +59,7 @@ class _NewApplicationState extends State<NewApplication> {
   void _presentDatePicker() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 1, now.month, now.day);
+    final originalDate = _dateApplied ?? now;
     final pickedDate = await showDatePicker(
       context: context,
       initialDate: now,
@@ -64,7 +67,7 @@ class _NewApplicationState extends State<NewApplication> {
       lastDate: now,
     );
     setState(() {
-      _dateApplied = pickedDate;
+      _dateApplied = pickedDate ?? originalDate;
     });
   }
 
@@ -135,9 +138,13 @@ class _NewApplicationState extends State<NewApplication> {
   }
 
   void _validateFormAndAddApplication() {
-    if (_organizationNameController.text.isNotEmpty) {
-      _addApplication();
+    if (_formKey.currentState!.validate()) {
+      if (_organizationNameController.text.isNotEmpty) {
+        _addApplication();
+      }
+      return;
     }
+    return;
   }
 
   List<Step> _getSteps() {
@@ -202,132 +209,142 @@ class _NewApplicationState extends State<NewApplication> {
       ),
       Step(
         title: const Text('Position'),
-        content: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.only(top: 5),
-              child: TextField(
-                controller: _positionTitleController,
-                maxLength: 50,
-                decoration: const InputDecoration(
-                  labelText: 'Position Title',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-            ExpansionTile(
-              title: const Text('Optional'),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          const Text('Position Type:   '),
-                          DropdownButton(
-                              value: _positionType,
-                              items: JobType.values
-                                  .map<DropdownMenuItem<JobType>>((jobType) {
-                                return DropdownMenuItem<JobType>(
-                                  value: jobType,
-                                  child: Text(jobType.toString()),
-                                );
-                              }).toList(),
-                              onChanged: (JobType? value) {
-                                setState(() {
-                                  _positionType = value!;
-                                });
-                              }),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          const Text('Wage Type:   '),
-                          DropdownButton(
-                              value: _positionWageType,
-                              items: WageType.values
-                                  .map<DropdownMenuItem<WageType>>(
-                                      (WageType value) {
-                                return DropdownMenuItem<WageType>(
-                                  value: value,
-                                  child: Text(value.toString()),
-                                );
-                              }).toList(),
-                              onChanged: (WageType? value) {
-                                setState(() {
-                                  _positionWageType = value!;
-                                });
-                              }),
-                        ],
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        child: Text('Wage Range'),
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                controller: _positionWageLowerBoundController,
-                                maxLength: 10,
-                                keyboardType: TextInputType.number,
-                                decoration: const InputDecoration(
-                                  prefixIcon: Icon(Icons.attach_money),
-                                  border: OutlineInputBorder(),
-                                  counterText: '',
-                                ),
-                              ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child:
-                                  Text(' - ', style: TextStyle(fontSize: 28)),
-                            ),
-                            Expanded(
-                              child: TextField(
-                                controller: _positionWageUpperBoundController,
-                                maxLength: 10,
-                                keyboardType: TextInputType.number,
-                                decoration: const InputDecoration(
-                                  prefixIcon: Icon(Icons.attach_money),
-                                  border: OutlineInputBorder(),
-                                  counterText: '',
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          const Text('Work Setting:   '),
-                          DropdownButton(
-                              value: _positionSettingType,
-                              items: WorkplaceSetting.values
-                                  .map<DropdownMenuItem<WorkplaceSetting>>(
-                                      (WorkplaceSetting value) {
-                                return DropdownMenuItem<WorkplaceSetting>(
-                                  value: value,
-                                  child: Text(value.toString()),
-                                );
-                              }).toList(),
-                              onChanged: (WorkplaceSetting? value) {
-                                setState(() {
-                                  _positionSettingType = value!;
-                                });
-                              }),
-                        ],
-                      ),
-                    ],
+        content: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.only(top: 5),
+                child: TextFormField(
+                  controller: _positionTitleController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a position title.';
+                    }
+                    return null;
+                  },
+                  textCapitalization: TextCapitalization.words,
+                  maxLength: 50,
+                  decoration: const InputDecoration(
+                    labelText: 'Position Title',
+                    border: OutlineInputBorder(),
                   ),
                 ),
-              ],
-            ),
-          ],
+              ),
+              ExpansionTile(
+                title: const Text('Optional'),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            const Text('Position Type:   '),
+                            DropdownButton(
+                                value: _positionType,
+                                items: JobType.values
+                                    .map<DropdownMenuItem<JobType>>((jobType) {
+                                  return DropdownMenuItem<JobType>(
+                                    value: jobType,
+                                    child: Text(jobType.toString()),
+                                  );
+                                }).toList(),
+                                onChanged: (JobType? value) {
+                                  setState(() {
+                                    _positionType = value!;
+                                  });
+                                }),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const Text('Wage Type:   '),
+                            DropdownButton(
+                                value: _positionWageType,
+                                items: WageType.values
+                                    .map<DropdownMenuItem<WageType>>(
+                                        (WageType value) {
+                                  return DropdownMenuItem<WageType>(
+                                    value: value,
+                                    child: Text(value.toString()),
+                                  );
+                                }).toList(),
+                                onChanged: (WageType? value) {
+                                  setState(() {
+                                    _positionWageType = value!;
+                                  });
+                                }),
+                          ],
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Text('Wage Range'),
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  controller: _positionWageLowerBoundController,
+                                  maxLength: 10,
+                                  keyboardType: TextInputType.number,
+                                  decoration: const InputDecoration(
+                                    prefixIcon: Icon(Icons.attach_money),
+                                    border: OutlineInputBorder(),
+                                    counterText: '',
+                                  ),
+                                ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child:
+                                    Text(' - ', style: TextStyle(fontSize: 28)),
+                              ),
+                              Expanded(
+                                child: TextField(
+                                  controller: _positionWageUpperBoundController,
+                                  maxLength: 10,
+                                  keyboardType: TextInputType.number,
+                                  decoration: const InputDecoration(
+                                    prefixIcon: Icon(Icons.attach_money),
+                                    border: OutlineInputBorder(),
+                                    counterText: '',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            const Text('Work Setting:   '),
+                            DropdownButton(
+                                value: _positionSettingType,
+                                items: WorkplaceSetting.values
+                                    .map<DropdownMenuItem<WorkplaceSetting>>(
+                                        (WorkplaceSetting value) {
+                                  return DropdownMenuItem<WorkplaceSetting>(
+                                    value: value,
+                                    child: Text(value.toString()),
+                                  );
+                                }).toList(),
+                                onChanged: (WorkplaceSetting? value) {
+                                  setState(() {
+                                    _positionSettingType = value!;
+                                  });
+                                }),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
         isActive: _currentStep >= 1,
         state: _currentStep > 1 ? StepState.complete : StepState.indexed,
