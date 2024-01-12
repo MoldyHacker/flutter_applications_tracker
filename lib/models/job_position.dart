@@ -1,39 +1,49 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum WorkplaceSetting {
-  remote,
-  hybrid,
-  office,
-  other,
+  remote('Remote'),
+  hybrid('Hybrid'),
+  office('Office'),
+  other('Other');
+
+  const WorkplaceSetting(this.setting);
+
+  final String setting;
+
+  @override
+  String toString() => setting;
 }
 
 enum JobType {
-  fullTime,
-  partTime,
-  internship,
-  contract,
-  freelance,
-  temporary,
-  seasonal,
-  other,
+  fullTime('Full Time'),
+  partTime('Part Time'),
+  internship('Internship'),
+  contract('Contract'),
+  freelance('Freelance'),
+  temporary('Temporary'),
+  seasonal('Seasonal'),
+  other('Other');
+
+  const JobType(this.type);
+
+  final String type;
+
+  @override
+  String toString() => type;
 }
 
-List<String> jobTypeToString = [
-  "Full Time",
-  "Part Time",
-  "Internship",
-  "Contract",
-  "Freelance",
-  "Temporary",
-  "Seasonal",
-  "Other",
-];
-
 enum WageType {
-  salary,
-  hourly,
-  commission,
-  other,
+  salary('Salary'),
+  hourly('Hourly'),
+  commission('Commission'),
+  other('Other');
+
+  const WageType(this.type);
+
+  final String type;
+
+  @override
+  String toString() => type;
 }
 
 class JobPosition {
