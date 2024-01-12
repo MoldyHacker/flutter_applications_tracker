@@ -137,8 +137,12 @@ class _NewApplicationState extends State<NewApplication> {
       jobTitle: _positionTitleController.text.trim(),
       organizationName: _organizationNameController.text.trim(),
       dateApplied: _dateApplied!,
-      applicationMethod: _applicationMethodController.text.trim(),
-      applicationUrl: _applicationUrlController.text.trim(),
+      applicationMethod: _applicationMethodController.text.isNotEmpty
+          ? _applicationMethodController.text.trim()
+          : null,
+      applicationUrl: _applicationUrlController.text.isNotEmpty
+          ? _applicationUrlController.text.trim()
+          : null,
     );
     DocumentReference docRef = await db
         .collection('users/$authUid/applications')
