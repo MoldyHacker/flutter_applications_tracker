@@ -10,7 +10,8 @@ class ActivityLog {
     this.id = '',
     required this.userId,
     required this.description,
-  }) : timestamp = Timestamp.now();
+    required this.timestamp,
+  });
 
   factory ActivityLog.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
@@ -18,6 +19,7 @@ class ActivityLog {
       id: doc.id,
       userId: data['userId'] ?? '',
       description: data['description'] ?? '',
+      timestamp: data['timestamp'] ?? '',
     );
   }
 
