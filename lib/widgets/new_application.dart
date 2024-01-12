@@ -1,34 +1,30 @@
 import 'package:applications_tracker/models/application.dart';
 import 'package:flutter/material.dart';
 
-List<DropdownMenuEntry> organizationsList = const [
-  DropdownMenuEntry(
-    label: 'Google',
-    value: 'Google',
-  ),
-  DropdownMenuEntry(
-    label: 'Facebook',
-    value: 'Facebook',
-  ),
-  DropdownMenuEntry(
-    label: 'Amazon',
-    value: 'Amazon',
-  )
+List<String> organizationsList = <String>['Google', 'Facebook'];
+
+List<String> applicationMethodsList = <String>[
+  'Company Website',
+  'LinkedIn',
+  'Indeed',
+  'Glassdoor',
+  'ZipRecruiter',
+  'Monster',
+  'CareerBuilder',
+  'AngelList',
+  'Hired',
+  'Other'
 ];
 
-List<DropdownMenuEntry> applicationMethodsList = const [
-  DropdownMenuEntry(
-    label: 'Online',
-    value: 'Online',
-  ),
-  DropdownMenuEntry(
-    label: 'Email',
-    value: 'Email',
-  ),
-  DropdownMenuEntry(
-    label: 'In Person',
-    value: 'In Person',
-  )
+List<String> positionTypeList = <String>[
+  'Full Time',
+  'Part Time',
+  'Internship',
+  'Contractor',
+  'Freelance',
+  'Temporary',
+  'Seasonal',
+  'Other'
 ];
 
 class NewApplication extends StatefulWidget {
@@ -44,6 +40,8 @@ class _NewApplicationState extends State<NewApplication> {
   final _organizationNameController = TextEditingController();
   final _positionTitleController = TextEditingController();
   final _applicationMethodController = TextEditingController();
+
+  String _positionType = positionTypeList.first;
 
   DateTime? _dateApplied = DateTime.now();
 
@@ -76,7 +74,13 @@ class _NewApplicationState extends State<NewApplication> {
             enableFilter: true,
             width: 320,
             label: const Text('Organization Name'),
-            dropdownMenuEntries: organizationsList,
+            dropdownMenuEntries: organizationsList
+                .map<DropdownMenuEntry<String>>((String value) {
+              return DropdownMenuEntry<String>(
+                value: value,
+                label: value,
+              );
+            }).toList(),
           ),
         ),
         isActive: _currentStep >= 0,
@@ -84,10 +88,29 @@ class _NewApplicationState extends State<NewApplication> {
       ),
       Step(
         title: const Text('Position'),
-        content: TextField(
-          controller: _positionTitleController,
-          maxLength: 50,
-          decoration: const InputDecoration(labelText: 'Position Title'),
+        content: Column(
+          children: [
+            TextField(
+              controller: _positionTitleController,
+              maxLength: 50,
+              decoration: const InputDecoration(labelText: 'Position Title'),
+            ),
+            const Text('Optional'),
+            DropdownButton(
+                value: _positionType,
+                items: positionTypeList
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (String? value) {
+                  setState(() {
+                    _positionType = value!;
+                  });
+                })
+          ],
         ),
         isActive: _currentStep >= 1,
         state: _currentStep > 1 ? StepState.complete : StepState.indexed,
@@ -116,17 +139,23 @@ class _NewApplicationState extends State<NewApplication> {
               ),
             ),
             Container(
-          padding: const EdgeInsets.only(top: 5),
-          width: double.infinity,
-          child: DropdownMenu(
-            controller: _applicationMethodController,
-            requestFocusOnTap: true,
-            enableFilter: true,
-            width: 320,
-            label: const Text('Application Method'),
-            dropdownMenuEntries: applicationMethodsList,
-          ),
-        ),
+              padding: const EdgeInsets.only(top: 5),
+              width: double.infinity,
+              child: DropdownMenu(
+                controller: _applicationMethodController,
+                requestFocusOnTap: true,
+                enableFilter: true,
+                width: 320,
+                label: const Text('Application Method'),
+                dropdownMenuEntries: applicationMethodsList
+                    .map<DropdownMenuEntry<String>>((String value) {
+                  return DropdownMenuEntry<String>(
+                    value: value,
+                    label: value,
+                  );
+                }).toList(),
+              ),
+            ),
           ],
         ),
         isActive: _currentStep >= 2,
