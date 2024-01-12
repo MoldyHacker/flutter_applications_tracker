@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 enum WorkplaceSetting {
   remote,
   hybrid,
@@ -12,6 +14,13 @@ enum JobType {
   temporary,
 }
 
+enum WageType {
+  salary,
+  hourly,
+  commission,
+  other,
+}
+
 class JobPosition {
   final String id;
   final String organizationId;
@@ -22,7 +31,7 @@ class JobPosition {
   final String? location;
   final double? wageLowerBound;
   final double? wageUpperBound;
-  final bool? isSalary;
+  final WageType? wageType;
   final String? requirements;
   final String? preferences;
 
@@ -37,8 +46,42 @@ class JobPosition {
     this.location,
     this.wageLowerBound,
     this.wageUpperBound,
-    this.isSalary,
+    this.wageType,
     this.requirements,
     this.preferences,
   });
+
+    factory JobPosition.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options) {
+    final data = snapshot.data()!;
+    return JobPosition(
+      id: snapshot.id,
+      organizationId: data['organizationId'] ?? '',
+      title: data['title'] ?? '',
+      jobType: JobType.values[data['jobType']],
+      workplaceSetting: WorkplaceSetting.values[data['workplaceSetting']],
+      description: data['description'],
+      location: data['location'],
+      wageLowerBound: data['wageLowerBound'],
+      wageUpperBound: data['wageUpperBound'],
+      wageType: WageType.values[data['wageType']],
+      requirements: data['requirements'],
+      preferences: data['preferences'],
+    );
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      'organizationId': organizationId,
+      'title': title,
+      'jobType': jobType?.index ?? FieldValue.delete(),
+      'workplaceSetting': workplaceSetting?.index  ?? FieldValue.delete(),
+      'description': description ?? FieldValue.delete(),
+      'location': location ?? FieldValue.delete(),
+      'wageLowerBound': wageLowerBound ?? FieldValue.delete(),
+      'wageUpperBound': wageUpperBound ?? FieldValue.delete(),
+      'wageType': wageType?.index ?? FieldValue.delete(),
+      'requirements': requirements ?? FieldValue.delete(),
+      'preferences': preferences ?? FieldValue.delete(),
+    };
+  }
 }
