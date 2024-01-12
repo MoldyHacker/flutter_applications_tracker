@@ -27,6 +27,20 @@ List<String> positionTypeList = <String>[
   'Other'
 ];
 
+List<String> positionWageTypeList = <String>[
+  'Salary',
+  'Hourly',
+  'Commission',
+  'Other'
+];
+
+List<String> positionSettingTypeList = <String>[
+  'Office',
+  'Remote',
+  'Hybrid',
+  'Other'
+];
+
 class NewApplication extends StatefulWidget {
   const NewApplication({super.key, required this.onAddApplication});
 
@@ -38,10 +52,16 @@ class NewApplication extends StatefulWidget {
 
 class _NewApplicationState extends State<NewApplication> {
   final _organizationNameController = TextEditingController();
+  final _organizationLocationController = TextEditingController();
   final _positionTitleController = TextEditingController();
+  final _positionWageLowerBoundController = TextEditingController();
+  final _positionWageUpperBoundController = TextEditingController();
+  final _positionSettingTypeController = TextEditingController();
   final _applicationMethodController = TextEditingController();
 
   String _positionType = positionTypeList.first;
+  String _positionWageType = positionWageTypeList.first;
+  String _positionSettingType = positionSettingTypeList.first;
 
   DateTime? _dateApplied = DateTime.now();
 
@@ -50,7 +70,11 @@ class _NewApplicationState extends State<NewApplication> {
   @override
   void dispose() {
     _organizationNameController.dispose();
+    _organizationLocationController.dispose();
     _positionTitleController.dispose();
+    _positionWageLowerBoundController.dispose();
+    _positionWageUpperBoundController.dispose();
+    _positionSettingTypeController.dispose();
     _applicationMethodController.dispose();
     super.dispose();
   }
@@ -97,9 +121,25 @@ class _NewApplicationState extends State<NewApplication> {
                 }).toList(),
               ),
             ),
-            const ExpansionTile(
-              title: Text('Optional'),
-              children: [],
+            ExpansionTile(
+              title: const Text('Optional'),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: _organizationLocationController,
+                        maxLength: 250,
+                        decoration: const InputDecoration(
+                          labelText: 'Location',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -113,25 +153,114 @@ class _NewApplicationState extends State<NewApplication> {
             TextField(
               controller: _positionTitleController,
               maxLength: 50,
-              decoration: const InputDecoration(labelText: 'Position Title'),
+              decoration: const InputDecoration(
+                labelText: 'Position Title',
+                border: OutlineInputBorder(),
+              ),
             ),
             ExpansionTile(
               title: const Text('Optional'),
               children: [
-                DropdownButton(
-                    value: _positionType,
-                    items: positionTypeList
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (String? value) {
-                      setState(() {
-                        _positionType = value!;
-                      });
-                    })
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          const Text('Position Type:   '),
+                          DropdownButton(
+                              value: _positionType,
+                              items: positionTypeList
+                                  .map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (String? value) {
+                                setState(() {
+                                  _positionType = value!;
+                                });
+                              }),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Text('Wage Type:   '),
+                          DropdownButton(
+                              value: _positionWageType,
+                              items: positionWageTypeList
+                                  .map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (String? value) {
+                                setState(() {
+                                  _positionWageType = value!;
+                                });
+                              }),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      const Text('Wage Range'),
+                      const SizedBox(height: 8),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: _positionWageLowerBoundController,
+                                maxLength: 10,
+                                decoration: const InputDecoration(
+                                  prefixIcon: Icon(Icons.attach_money),
+                                  border: OutlineInputBorder(),
+                                  counterText: '',
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: TextField(
+                                controller: _positionWageUpperBoundController,
+                                maxLength: 10,
+                                decoration: const InputDecoration(
+                                  prefixIcon: Icon(Icons.attach_money),
+                                  border: OutlineInputBorder(),
+                                  counterText: '',
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          const Text('Work Setting:   '),
+                          DropdownButton(
+                              value: _positionSettingType,
+                              items: positionSettingTypeList
+                                  .map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (String? value) {
+                                setState(() {
+                                  _positionSettingType = value!;
+                                });
+                              }),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ],
@@ -159,22 +288,29 @@ class _NewApplicationState extends State<NewApplication> {
             ExpansionTile(
               title: const Text('Optional'),
               children: [
-                Container(
-                  padding: const EdgeInsets.only(top: 5),
-                  width: double.infinity,
-                  child: DropdownMenu(
-                    controller: _applicationMethodController,
-                    requestFocusOnTap: true,
-                    enableFilter: true,
-                    width: 320,
-                    label: const Text('Application Method'),
-                    dropdownMenuEntries: applicationMethodsList
-                        .map<DropdownMenuEntry<String>>((String value) {
-                      return DropdownMenuEntry<String>(
-                        value: value,
-                        label: value,
-                      );
-                    }).toList(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(top: 5),
+                        width: double.infinity,
+                        child: DropdownMenu(
+                          controller: _applicationMethodController,
+                          requestFocusOnTap: true,
+                          enableFilter: true,
+                          width: 310,
+                          label: const Text('Application Method'),
+                          dropdownMenuEntries: applicationMethodsList
+                              .map<DropdownMenuEntry<String>>((String value) {
+                            return DropdownMenuEntry<String>(
+                              value: value,
+                              label: value,
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
