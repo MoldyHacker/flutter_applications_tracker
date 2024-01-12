@@ -11,10 +11,6 @@ final authUid = FirebaseAuth.instance.currentUser!.uid;
 // TODO: Make this list dynamic
 List<String> organizationsList = <String>['Google', 'Facebook'];
 
-// List<String> positionSettingTypeList = WorkplaceSetting.values
-//     .map((workplaceSetting) => workplaceSetting.toString().split('.').last)
-//     .toList();
-
 class NewApplication extends StatefulWidget {
   const NewApplication({super.key, required this.onAddApplication});
 
@@ -108,36 +104,34 @@ class _NewApplicationState extends State<NewApplication> {
     JobPosition position = JobPosition(
       title: _positionTitleController.text,
       organizationId: organizationDocumentId,
-      // jobType: stringToJobType(_positionType),
-      // wageType: WageType.values.byName(_positionWageType),
-      // workplaceSetting: WorkplaceSetting.values.byName(_positionSettingType),
+      jobType: JobType.values.byName(_positionType.type),
+      workplaceSetting:
+          WorkplaceSetting.values.byName(_positionSettingType.setting),
+      wageType: WageType.values.byName(_positionWageType.type),
       wageLowerBound: double.tryParse(_positionWageLowerBoundController.text),
       wageUpperBound: double.tryParse(_positionWageUpperBoundController.text),
     );
-    DocumentReference docRef =
-        await db.collection('users/$authUid/positions').add({
-      'title': _positionTitleController.text,
-      'organization': organizationDocumentId,
-      'type': _positionType,
-      'wageType': _positionWageType,
-      'wageLowerBound': _positionWageLowerBoundController.text,
-      'wageUpperBound': _positionWageUpperBoundController.text,
-      'settingType': _positionSettingType,
-    });
+    DocumentReference docRef = await db
+        .collection('users/$authUid/positions')
+        .add(position.toFirestore());
     return docRef.id;
   }
 
   // Add the application to the database
   void _addApplication() async {
     String positionDocumentId = await _addPosition();
-    db.collection('users/$authUid/applications').add({
-      'position': positionDocumentId,
-      'positionTitle': _positionTitleController.text,
-      'organization': _organizationNameController.text,
-      'dateApplied': _dateApplied,
-      'applicationMethod': _applicationMethodController.text,
-      'applicationUrl': _applicationUrlController.text,
-    });
+    Application application = Application(
+      jobPositionId: positionDocumentId,
+      jobTitle: _positionTitleController.text,
+      organizationName: _organizationNameController.text,
+      dateApplied: _dateApplied!,
+      applicationMethod: _applicationMethodController.text,
+      applicationUrl: _applicationUrlController.text,
+    );
+    DocumentReference docRef = await db
+        .collection('users/$authUid/applications')
+        .add(application.toFirestore());
+    // return docRef.id;
   }
 
   void _validateFormAndAddApplication() {
@@ -234,8 +228,7 @@ class _NewApplicationState extends State<NewApplication> {
                           DropdownButton(
                               value: _positionType,
                               items: JobType.values
-                                  .map<DropdownMenuItem<JobType>>(
-                                      (jobType) {
+                                  .map<DropdownMenuItem<JobType>>((jobType) {
                                 return DropdownMenuItem<JobType>(
                                   value: jobType,
                                   child: Text(jobType.toString()),
