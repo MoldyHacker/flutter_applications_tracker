@@ -42,8 +42,8 @@ class Application {
       jobPositionId: data['jobPositionId'],
       dateApplied: data['dateApplied'].toDate(),
       status: Status.values[data['status']],
-      // resumeId: data['resumeId'],
-      // coverLetter: data['coverLetter'],
+      resumeId: data['resumeId'] ?? '',
+      coverLetter: data['coverLetter'] ?? '',
     );
   }
 
