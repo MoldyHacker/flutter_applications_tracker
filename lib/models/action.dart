@@ -53,8 +53,8 @@ class Action {
       'applicationId': applicationId,
       'actionType': actionType.index,
       'date': Timestamp.fromDate(date),
-      'description': description ?? FieldValue.delete(),
-      'result': result ?? FieldValue.delete(),
+      if (description != null) 'description': description,
+      if (result != null) 'result': result,
     };
   }
 }
