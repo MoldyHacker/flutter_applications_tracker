@@ -37,16 +37,24 @@ final formatter = DateFormat.yMd();
 class Application {
   final String id;
   final String jobPositionId;
+  final String jobTitle;
+  final String organizationName;
   final Status status;
   final DateTime dateApplied;
+  final String? applicationMethod;
+  final String? applicationUrl;
   final String? resumeId;
   final String? coverLetter;
 
   Application({
     this.id = '',
     required this.jobPositionId,
+    required this.jobTitle,
+    required this.organizationName,
     required this.dateApplied,
     this.status = Status.applied,
+    this.applicationMethod,
+    this.applicationUrl,
     this.resumeId,
     this.coverLetter,
   });
@@ -60,8 +68,12 @@ class Application {
     return Application(
       id: snapshot.id,
       jobPositionId: data['jobPositionId'] ?? '',
+      jobTitle: data['jobTitle'] ?? '',
+      organizationName: data['organizationName'] ?? '',
       dateApplied: data['dateApplied'].toDate() ?? '',
       status: Status.values[data['status']],
+      applicationMethod: data['applicationMethod'],
+      applicationUrl: data['applicationUrl'],
       resumeId: data['resumeId'],
       coverLetter: data['coverLetter'],
     );
@@ -70,8 +82,12 @@ class Application {
   Map<String, dynamic> toFirestore() {
     return {
       'jobPositionId': jobPositionId,
+      'jobTitle': jobTitle,
+      'organizationName': organizationName,
       'dateApplied': dateApplied,
       'status': status.index,
+      'applicationMethod': applicationMethod ?? FieldValue.delete(),
+      'applicationUrl': applicationUrl ?? FieldValue.delete(),
       'resumeId': resumeId ?? FieldValue.delete(),
       'coverLetter': coverLetter ?? FieldValue.delete(),
     };
