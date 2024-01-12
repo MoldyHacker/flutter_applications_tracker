@@ -2,14 +2,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 enum Status {
-  applied,
-  interviewing,
-  offered,
-  rejected,
-  accepted,
-  withdrawn,
-  negotiating,
-  drafted,
+  applied('Applied'),
+  interviewing('Interviewing'),
+  offered('Offered'),
+  rejected('Rejected'),
+  accepted('Accepted'),
+  withdrawn('Withdrawn'),
+  negotiating('Negotiating'),
+  drafted('Drafted');
+
+  const Status(this.status);
+
+  final String status;
+
+  @override
+  String toString() => status;
 }
 
 List<String> applicationMethodsList = <String>[
