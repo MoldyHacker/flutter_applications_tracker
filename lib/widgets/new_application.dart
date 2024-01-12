@@ -53,6 +53,7 @@ class NewApplication extends StatefulWidget {
 class _NewApplicationState extends State<NewApplication> {
   final _organizationNameController = TextEditingController();
   final _organizationLocationController = TextEditingController();
+  final _organizationWebsiteController = TextEditingController();
   final _positionTitleController = TextEditingController();
   final _positionWageLowerBoundController = TextEditingController();
   final _positionWageUpperBoundController = TextEditingController();
@@ -71,6 +72,7 @@ class _NewApplicationState extends State<NewApplication> {
   void dispose() {
     _organizationNameController.dispose();
     _organizationLocationController.dispose();
+    _organizationWebsiteController.dispose();
     _positionTitleController.dispose();
     _positionWageLowerBoundController.dispose();
     _positionWageUpperBoundController.dispose();
@@ -134,6 +136,17 @@ class _NewApplicationState extends State<NewApplication> {
                         decoration: const InputDecoration(
                           labelText: 'Location',
                           border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.location_on_outlined),
+                        ),
+                      ),
+                      TextField(
+                        controller: _organizationWebsiteController,
+                        maxLength: 250,
+                        keyboardType: TextInputType.url,
+                        decoration: const InputDecoration(
+                          labelText: 'Website',
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.link_outlined),
                         ),
                       ),
                     ],
@@ -217,6 +230,7 @@ class _NewApplicationState extends State<NewApplication> {
                               child: TextField(
                                 controller: _positionWageLowerBoundController,
                                 maxLength: 10,
+                                keyboardType: TextInputType.number,
                                 decoration: const InputDecoration(
                                   prefixIcon: Icon(Icons.attach_money),
                                   border: OutlineInputBorder(),
@@ -224,10 +238,16 @@ class _NewApplicationState extends State<NewApplication> {
                                 ),
                               ),
                             ),
+                            const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child:
+                                  Text(' - ', style: TextStyle(fontSize: 28)),
+                            ),
                             Expanded(
                               child: TextField(
                                 controller: _positionWageUpperBoundController,
                                 maxLength: 10,
+                                keyboardType: TextInputType.number,
                                 decoration: const InputDecoration(
                                   prefixIcon: Icon(Icons.attach_money),
                                   border: OutlineInputBorder(),
