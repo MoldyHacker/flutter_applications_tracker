@@ -35,11 +35,12 @@ class Organization {
   Map<String, dynamic> toFirestore() {
     return {
       'name': name,
-      'industry': industry ?? FieldValue.delete(),
-      'location': location ?? FieldValue.delete(),
-      'email': email ?? FieldValue.delete(),
-      'website': website ?? FieldValue.delete(),
-      'phoneNumber': phoneNumber ?? FieldValue.delete(),
+      
+      if (industry != null) 'industry': industry,
+      if (location != null) 'location': location,
+      if (email != null) 'email': email,
+      if (website != null) 'website': website,
+      if (phoneNumber != null) 'phoneNumber': phoneNumber,
     };
   }
 }
