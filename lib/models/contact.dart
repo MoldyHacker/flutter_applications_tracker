@@ -36,10 +36,10 @@ class Contact {
     return {
       'name': name,
       'title': title,
-      'email': email ?? FieldValue.delete(),
-      'phone': phone ?? FieldValue.delete(),
-      'linkedInUrl': linkedInUrl ?? FieldValue.delete(),
-      'organizationId': organizationId ?? FieldValue.delete(),
+      if (email != null) 'email': email,
+      if (phone != null) 'phone': phone,
+      if (linkedInUrl != null) 'linkedInUrl': linkedInUrl,
+      if (organizationId != null) 'organizationId': organizationId,
     };
   }
 }
