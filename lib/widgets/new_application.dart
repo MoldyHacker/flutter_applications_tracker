@@ -6,22 +6,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 final db = FirebaseFirestore.instance;
-final auth = FirebaseAuth.instance;
+final authUid = FirebaseAuth.instance.currentUser!.uid;
 
 // TODO: Make this list dynamic
 List<String> organizationsList = <String>['Google', 'Facebook'];
 
-List<String> positionWageTypeList = WageType.values
-    .map((wageType) => wageType.toString().split('.').last)
-    .toList();
-
-List<String> positionTypeList = JobType.values
-    .map((jobType) => jobType.toString().split('.').last)
-    .toList();
-
-List<String> positionSettingTypeList = WorkplaceSetting.values
-    .map((workplaceSetting) => workplaceSetting.toString().split('.').last)
-    .toList();
+// List<String> positionSettingTypeList = WorkplaceSetting.values
+//     .map((workplaceSetting) => workplaceSetting.toString().split('.').last)
+//     .toList();
 
 class NewApplication extends StatefulWidget {
   const NewApplication({super.key, required this.onAddApplication});
@@ -40,9 +32,9 @@ class _NewApplicationState extends State<NewApplication> {
   final _positionTitleController = TextEditingController();
   final _positionWageLowerBoundController = TextEditingController();
   final _positionWageUpperBoundController = TextEditingController();
-  String _positionType = positionTypeList.first;
-  String _positionWageType = positionWageTypeList.first;
-  String _positionSettingType = positionSettingTypeList.first;
+  JobType _positionType = JobType.values.first;
+  WageType _positionWageType = WageType.values.first;
+  WorkplaceSetting _positionSettingType = WorkplaceSetting.values.first;
 
   final _applicationMethodController = TextEditingController();
   final _applicationUrlController = TextEditingController();
@@ -84,7 +76,7 @@ class _NewApplicationState extends State<NewApplication> {
   Future<String> getOrganizationDocumentId() async {
     String? documentId;
     db
-        .collection('users/${auth.currentUser!.uid}/organizations')
+        .collection('users/$authUid/organizations')
         .where('name', isEqualTo: _organizationNameController.text)
         .get()
         .then((QuerySnapshot querySnapshot) {
@@ -104,7 +96,7 @@ class _NewApplicationState extends State<NewApplication> {
       website: _organizationWebsiteController.text,
     );
     DocumentReference docRef = await db
-        .collection('users/${auth.currentUser!.uid}/organizations')
+        .collection('users/$authUid/organizations')
         .add(organization.toFirestore());
 
     return docRef.id;
@@ -113,8 +105,17 @@ class _NewApplicationState extends State<NewApplication> {
   // Add the position to the database and return the document id
   Future<String> _addPosition() async {
     String organizationDocumentId = await getOrganizationDocumentId();
+    JobPosition position = JobPosition(
+      title: _positionTitleController.text,
+      organizationId: organizationDocumentId,
+      // jobType: stringToJobType(_positionType),
+      // wageType: WageType.values.byName(_positionWageType),
+      // workplaceSetting: WorkplaceSetting.values.byName(_positionSettingType),
+      wageLowerBound: double.tryParse(_positionWageLowerBoundController.text),
+      wageUpperBound: double.tryParse(_positionWageUpperBoundController.text),
+    );
     DocumentReference docRef =
-        await db.collection('users/${auth.currentUser!.uid}/positions').add({
+        await db.collection('users/$authUid/positions').add({
       'title': _positionTitleController.text,
       'organization': organizationDocumentId,
       'type': _positionType,
@@ -129,7 +130,7 @@ class _NewApplicationState extends State<NewApplication> {
   // Add the application to the database
   void _addApplication() async {
     String positionDocumentId = await _addPosition();
-    db.collection('users/${auth.currentUser!.uid}/applications').add({
+    db.collection('users/$authUid/applications').add({
       'position': positionDocumentId,
       'positionTitle': _positionTitleController.text,
       'organization': _organizationNameController.text,
@@ -209,12 +210,15 @@ class _NewApplicationState extends State<NewApplication> {
         title: const Text('Position'),
         content: Column(
           children: [
-            TextField(
-              controller: _positionTitleController,
-              maxLength: 50,
-              decoration: const InputDecoration(
-                labelText: 'Position Title',
-                border: OutlineInputBorder(),
+            Container(
+              padding: const EdgeInsets.only(top: 5),
+              child: TextField(
+                controller: _positionTitleController,
+                maxLength: 50,
+                decoration: const InputDecoration(
+                  labelText: 'Position Title',
+                  border: OutlineInputBorder(),
+                ),
               ),
             ),
             ExpansionTile(
@@ -229,15 +233,15 @@ class _NewApplicationState extends State<NewApplication> {
                           const Text('Position Type:   '),
                           DropdownButton(
                               value: _positionType,
-                              items: positionTypeList
-                                  .map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
+                              items: JobType.values
+                                  .map<DropdownMenuItem<JobType>>(
+                                      (jobType) {
+                                return DropdownMenuItem<JobType>(
+                                  value: jobType,
+                                  child: Text(jobType.toString()),
                                 );
                               }).toList(),
-                              onChanged: (String? value) {
+                              onChanged: (JobType? value) {
                                 setState(() {
                                   _positionType = value!;
                                 });
@@ -249,15 +253,15 @@ class _NewApplicationState extends State<NewApplication> {
                           const Text('Wage Type:   '),
                           DropdownButton(
                               value: _positionWageType,
-                              items: positionWageTypeList
-                                  .map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                return DropdownMenuItem<String>(
+                              items: WageType.values
+                                  .map<DropdownMenuItem<WageType>>(
+                                      (WageType value) {
+                                return DropdownMenuItem<WageType>(
                                   value: value,
-                                  child: Text(value),
+                                  child: Text(value.toString()),
                                 );
                               }).toList(),
-                              onChanged: (String? value) {
+                              onChanged: (WageType? value) {
                                 setState(() {
                                   _positionWageType = value!;
                                 });
@@ -310,15 +314,15 @@ class _NewApplicationState extends State<NewApplication> {
                           const Text('Work Setting:   '),
                           DropdownButton(
                               value: _positionSettingType,
-                              items: positionSettingTypeList
-                                  .map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                return DropdownMenuItem<String>(
+                              items: WorkplaceSetting.values
+                                  .map<DropdownMenuItem<WorkplaceSetting>>(
+                                      (WorkplaceSetting value) {
+                                return DropdownMenuItem<WorkplaceSetting>(
                                   value: value,
-                                  child: Text(value),
+                                  child: Text(value.toString()),
                                 );
                               }).toList(),
-                              onChanged: (String? value) {
+                              onChanged: (WorkplaceSetting? value) {
                                 setState(() {
                                   _positionSettingType = value!;
                                 });
