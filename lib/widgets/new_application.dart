@@ -59,6 +59,7 @@ class _NewApplicationState extends State<NewApplication> {
   final _positionWageUpperBoundController = TextEditingController();
   final _positionSettingTypeController = TextEditingController();
   final _applicationMethodController = TextEditingController();
+  final _applicationUrlController = TextEditingController();
 
   String _positionType = positionTypeList.first;
   String _positionWageType = positionWageTypeList.first;
@@ -78,6 +79,7 @@ class _NewApplicationState extends State<NewApplication> {
     _positionWageUpperBoundController.dispose();
     _positionSettingTypeController.dispose();
     _applicationMethodController.dispose();
+    _applicationUrlController.dispose();
     super.dispose();
   }
 
@@ -132,7 +134,7 @@ class _NewApplicationState extends State<NewApplication> {
                     children: [
                       TextField(
                         controller: _organizationLocationController,
-                        maxLength: 250,
+                        maxLength: 125,
                         decoration: const InputDecoration(
                           labelText: 'Location',
                           border: OutlineInputBorder(),
@@ -141,7 +143,7 @@ class _NewApplicationState extends State<NewApplication> {
                       ),
                       TextField(
                         controller: _organizationWebsiteController,
-                        maxLength: 250,
+                        maxLength: 50,
                         keyboardType: TextInputType.url,
                         decoration: const InputDecoration(
                           labelText: 'Website',
@@ -218,9 +220,10 @@ class _NewApplicationState extends State<NewApplication> {
                               }),
                         ],
                       ),
-                      const SizedBox(height: 8),
-                      const Text('Wage Range'),
-                      const SizedBox(height: 8),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: Text('Wage Range'),
+                      ),
                       SizedBox(
                         width: double.infinity,
                         child: Row(
@@ -328,6 +331,17 @@ class _NewApplicationState extends State<NewApplication> {
                               label: value,
                             );
                           }).toList(),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: _applicationUrlController,
+                        maxLength: 50,
+                        keyboardType: TextInputType.url,
+                        decoration: const InputDecoration(
+                          labelText: 'Application Url',
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.link_outlined),
                         ),
                       ),
                     ],
