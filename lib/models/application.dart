@@ -41,11 +41,11 @@ class Application {
     final data = snapshot.data()!;
     return Application(
       id: snapshot.id,
-      jobPositionId: data['jobPositionId'],
-      dateApplied: data['dateApplied'].toDate(),
+      jobPositionId: data['jobPositionId'] ?? '',
+      dateApplied: data['dateApplied'].toDate() ?? '',
       status: Status.values[data['status']],
-      resumeId: data['resumeId'] ?? '',
-      coverLetter: data['coverLetter'] ?? '',
+      resumeId: data['resumeId'],
+      coverLetter: data['coverLetter'],
     );
   }
 
