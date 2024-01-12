@@ -63,7 +63,9 @@ class Application {
     return formatter.format(dateApplied);
   }
 
-  factory Application.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options) {
+  factory Application.fromFirestore(
+      DocumentSnapshot<Map<String, dynamic>> snapshot,
+      SnapshotOptions? options) {
     final data = snapshot.data()!;
     return Application(
       id: snapshot.id,
@@ -86,10 +88,10 @@ class Application {
       'organizationName': organizationName,
       'dateApplied': dateApplied,
       'status': status.index,
-      'applicationMethod': applicationMethod ?? FieldValue.delete(),
-      'applicationUrl': applicationUrl ?? FieldValue.delete(),
-      'resumeId': resumeId ?? FieldValue.delete(),
-      'coverLetter': coverLetter ?? FieldValue.delete(),
+      if (applicationMethod != null) 'applicationMethod': applicationMethod,
+      if (applicationUrl != null) 'applicationUrl': applicationUrl,
+      if (resumeId != null) 'resumeId': resumeId,
+      if (coverLetter != null) 'coverLetter': coverLetter,
     };
   }
 }
