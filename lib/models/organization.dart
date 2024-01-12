@@ -35,7 +35,6 @@ class Organization {
   Map<String, dynamic> toFirestore() {
     return {
       'name': name,
-      
       if (industry != null) 'industry': industry,
       if (location != null) 'location': location,
       if (email != null) 'email': email,
