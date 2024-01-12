@@ -1,5 +1,10 @@
 import 'package:applications_tracker/models/application.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+final db = FirebaseFirestore.instance;
+final auth = FirebaseAuth.instance;
 
 List<String> organizationsList = <String>['Google', 'Facebook'];
 
@@ -98,6 +103,61 @@ class _NewApplicationState extends State<NewApplication> {
     );
     setState(() {
       _dateApplied = pickedDate;
+    });
+  }
+
+  // Retrieve the organization document id if it exists, otherwise add it
+  Future<String> getOrganizationDocumentId() async {
+    String? documentId;
+    db
+        .collection('users/${auth.currentUser!.uid}/organizations')
+        .where('name', isEqualTo: _organizationNameController.text)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      documentId = querySnapshot.docs.firstOrNull?.id;
+    });
+    if (documentId == null) {
+      return _addOrganization();
+    }
+    return documentId!;
+  }
+
+  // Add the organization to the database and return the document id
+  Future<String> _addOrganization() async {
+    DocumentReference docRef = await db
+        .collection('users/${auth.currentUser!.uid}/organizations')
+        .add({
+      'name': _organizationNameController.text,
+      'location': _organizationLocationController.text,
+      'website': _organizationWebsiteController.text,
+    });
+    return docRef.id;
+  }
+
+  // Add the position to the database and return the document id
+  Future<String> _addPosition() async {
+    String organizationDocumentId = await getOrganizationDocumentId();
+    DocumentReference docRef =
+        await db.collection('users/${auth.currentUser!.uid}/positions').add({
+      'title': _positionTitleController.text,
+      'organization': organizationDocumentId,
+      'type': _positionType,
+      'wageType': _positionWageType,
+      'wageLowerBound': _positionWageLowerBoundController.text,
+      'wageUpperBound': _positionWageUpperBoundController.text,
+      'settingType': _positionSettingType,
+    });
+    return docRef.id;
+  }
+
+  // Add the application to the database
+  void _addApplication() async {
+    String positionDocumentId = await _addPosition();
+    db.collection('users/${auth.currentUser!.uid}/applications').add({
+      'position': positionDocumentId,
+      'dateApplied': _dateApplied,
+      'applicationMethod': _applicationMethodController.text,
+      'applicationUrl': _applicationUrlController.text,
     });
   }
 
