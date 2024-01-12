@@ -98,15 +98,15 @@ class JobPosition {
     return {
       'organizationId': organizationId,
       'title': title,
-      'jobType': jobType?.index ?? FieldValue.delete(),
-      'workplaceSetting': workplaceSetting?.index  ?? FieldValue.delete(),
-      'description': description ?? FieldValue.delete(),
-      'location': location ?? FieldValue.delete(),
-      'wageLowerBound': wageLowerBound ?? FieldValue.delete(),
-      'wageUpperBound': wageUpperBound ?? FieldValue.delete(),
-      'wageType': wageType?.index ?? FieldValue.delete(),
-      'requirements': requirements ?? FieldValue.delete(),
-      'preferences': preferences ?? FieldValue.delete(),
+      if (jobType != null) 'jobType': jobType?.index,
+      if (workplaceSetting != null)'workplaceSetting': workplaceSetting?.index,
+      if (description != null)'description': description,
+      if (location != null)'location': location,
+      if (wageLowerBound != null)'wageLowerBound': wageLowerBound,
+      if (wageUpperBound != null)'wageUpperBound': wageUpperBound,
+      if (wageType != null)'wageType': wageType?.index,
+      if (requirements != null)'requirements': requirements,
+      if (preferences != null)'preferences': preferences,
     };
   }
 }
