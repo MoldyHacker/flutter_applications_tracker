@@ -88,10 +88,6 @@ class _NewApplicationState extends State<NewApplication> {
     super.dispose();
   }
 
-  void _validate() {
-    _organizationNameController.text.isNotEmpty;
-  }
-
   void _presentDatePicker() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 1, now.month, now.day);
@@ -159,6 +155,12 @@ class _NewApplicationState extends State<NewApplication> {
       'applicationMethod': _applicationMethodController.text,
       'applicationUrl': _applicationUrlController.text,
     });
+  }
+
+  void _validateFormAndAddApplication() {
+    if (_organizationNameController.text.isNotEmpty) {
+      _addApplication();
+    }
   }
 
   List<Step> _getSteps() {
@@ -443,6 +445,9 @@ class _NewApplicationState extends State<NewApplication> {
                 onStepContinue: () {
                   if (_currentStep < _getSteps().length - 1) {
                     setState(() => _currentStep++);
+                  } else {
+                    _validateFormAndAddApplication();
+                    Navigator.of(context).pop();
                   }
                 },
                 onStepTapped: (step) => setState(() => _currentStep = step),
