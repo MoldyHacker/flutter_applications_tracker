@@ -1,5 +1,6 @@
 import 'package:applications_tracker/models/application.dart';
 import 'package:applications_tracker/models/contact.dart';
+import 'package:applications_tracker/models/organization.dart';
 import 'package:flutter/material.dart';
 
 List<Contact> contacts = [
@@ -23,6 +24,16 @@ List<Contact> contacts = [
   // ),
 ];
 
+Organization organization = Organization(
+  id: '1',
+  name: 'Google',
+  website: 'https://google.com',
+  industry: 'Technology',
+  location: '1600 Amphitheatre Parkway, Mountain View, CA 94043',
+  phone: '+1 555-555-5555',
+  email: 'support@google.com',
+);
+
 class EditApplicationScreen extends StatelessWidget {
   const EditApplicationScreen({super.key, required this.application});
 
@@ -42,14 +53,76 @@ class EditApplicationScreen extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Text('Edit Application Title'),
-              Text('Edit Organization'),
-              Text('Edit Position'),
-              Text('Edit Application'),
-              Text('Edit Contacts'),
-              // if no contacts, show 'Add Contact' button
-              // if contacts, show list of contacts
-              // if contacts, show 'Edit Contacts' button
+              const Text('Edit Status'),
+              const Text('Edit Organization'),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      organization.name,
+                      style: TextStyle(
+                        fontSize:
+                            Theme.of(context).textTheme.titleMedium!.fontSize,
+                        fontWeight:
+                            Theme.of(context).textTheme.titleMedium!.fontWeight,
+                      ),
+                    ),
+                    if (organization.industry != null)
+                      Row(
+                        children: [
+                          const Icon(Icons.business_outlined),
+                          const SizedBox(width: 8),
+                          Text(organization.industry!),
+                        ],
+                      ),
+                      if (organization.phone != null)
+                      Row(
+                        children: [
+                          const Icon(Icons.phone_outlined),
+                          const SizedBox(width: 8),
+                          Text(organization.phone!),
+                        ],
+                      ),                    
+                    if (organization.email != null)
+                      Row(
+                        children: [
+                          const Icon(Icons.email_outlined),
+                          const SizedBox(width: 8),
+                          Text(organization.email!),
+                        ],
+                      ),
+                    if (organization.website != null)
+                      Row(
+                        children: [
+                          const Icon(Icons.link_outlined),
+                          const SizedBox(width: 8),
+                          
+                          Text(organization.website!),
+                        ],
+                      ),
+                    
+                      if (organization.location != null)
+                      Row(
+                        children: [
+                          const Icon(Icons.location_on_outlined),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              organization.location!,
+                              maxLines: 2,
+                            ),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+              ),
+              const Text('Edit Position'),
+              const Text('Edit Application'),
               if (contacts.isEmpty)
                 TextButton.icon(
                   icon: const Icon(Icons.person_add),
