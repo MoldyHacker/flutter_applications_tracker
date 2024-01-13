@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:applications_tracker/models/application.dart';
+import 'package:applications_tracker/screens/edit_application.dart';
 import 'package:applications_tracker/widgets/application_card/application_card_contact.dart';
 import 'package:applications_tracker/widgets/application_card/application_card_list_items.dart';
 import 'package:applications_tracker/widgets/application_card/application_card_subtitle.dart';
@@ -183,6 +184,11 @@ class _ApplicationsListState extends State<ApplicationsList> {
                           style: flatButtonStyle,
                           onPressed: () {
                             // cardA.currentState?.collapse();
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => EditApplicationScreen(
+                                application: application,
+                              ),
+                            ));
                           },
                           child: const Column(
                             children: <Widget>[
