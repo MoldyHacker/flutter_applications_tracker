@@ -53,42 +53,6 @@ List<Map<String, String>> actionItems = [
     'description': 'Action Item',
   },
 ];
-// List<Map<String, String>> applications = [
-//   {
-//     'companyName': 'Milwaukee Tool',
-//     'positionTitle': 'Senior Software Engineer',
-//     'dateApplied': '12/23/23',
-//     'dateUpdated': '1/4/24',
-//     'contactName': 'Mike Walden',
-//     'contactTitle': 'IT Manager',
-//     'contactPhone': '+143 (555)-555-5555',
-//     'contactEmail': 'example@example.com',
-//     'notes': 'Notes',
-//     'actionItems': 'Action Items',
-//   },
-//   {
-//     'companyName': 'Company Name',
-//     'positionTitle': 'Position Title',
-//     'contactName': 'Contact Name',
-//     'contactPhone': 'Contact Phone',
-//     'contactEmail': 'Contact Email',
-//     'dateApplied': 'Date Applied',
-//     'dateUpdated': 'Date Updated',
-//     'notes': 'Notes',
-//     'actionItems': 'Action Items',
-//   },
-//   {
-//     'companyName': 'Company Name',
-//     'positionTitle': 'Position Title',
-//     'contactName': 'Contact Name',
-//     'contactPhone': 'Contact Phone',
-//     'contactEmail': 'Contact Email',
-//     'dateApplied': 'Date Applied',
-//     'dateUpdated': 'Date Updated',
-//     'notes': 'Notes',
-//     'actionItems': 'Action Items',
-//   },
-// ];
 List<Map<String, String>> contact = [
   {
     'contactName': 'Mike Walden',
