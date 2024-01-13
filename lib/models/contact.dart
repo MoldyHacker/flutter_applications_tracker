@@ -7,14 +7,14 @@ enum ContactType {
 }
 
 enum ContactMethod {
-  email('Email', Icon(Icons.email_outlined)),
-  phone('Phone', Icon(Icons.phone_outlined)),
-  linkedIn('LinkedIn', Icon(Icons.link_outlined));
+  email('Email', Icons.email_outlined),
+  phone('Phone', Icons.phone_outlined),
+  linkedIn('LinkedIn', Icons.link_outlined);
 
   const ContactMethod(this.method, this.icon);
 
   final String method;
-  final Icon icon;
+  final IconData icon;
 }
 
 class Contact {
@@ -25,6 +25,7 @@ class Contact {
   final String? phone;
   final String? linkedInUrl;
   final String? organizationId;
+  final String? organizationName;
 
   Contact({
     this.id = '',
@@ -34,6 +35,7 @@ class Contact {
     this.phone,
     this.linkedInUrl,
     this.organizationId,
+    this.organizationName,
   });
 
   factory Contact.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -42,11 +44,12 @@ class Contact {
     return Contact(
       id: snapshot.id,
       name: data['name'] ?? '',
-      title: data['title'] ?? '',
+      title: data['title'],
       email: data['email'],
       phone: data['phone'],
       linkedInUrl: data['linkedInUrl'],
       organizationId: data['organizationId'],
+      organizationName: data['organizationName'],
     );
   }
 
@@ -58,6 +61,7 @@ class Contact {
       if (phone != null) 'phone': phone,
       if (linkedInUrl != null) 'linkedInUrl': linkedInUrl,
       if (organizationId != null) 'organizationId': organizationId,
+      if (organizationName != null) 'organizationName': organizationName,
     };
   }
 }
