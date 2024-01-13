@@ -7,15 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 List<Contact> contacts = [
-  // Contact(
-  //   id: '1',
-  //   name: 'Mike Warden',
-  //   title: 'IT Manager',
-  //   email: 'example@example.com',
-  //   phone: '+1 555-555-5555',
-  //   organizationId: 'stringText',
-  //   organizationName: 'Google',
-  // ),
+  Contact(
+    id: '1',
+    name: 'Mike Warden',
+    title: 'IT Manager',
+    email: 'example@example.com',
+    phone: '+1 555-555-5555',
+    organizationId: 'stringText',
+    organizationName: 'Google',
+  ),
   // Contact(
   //   id: '2',
   //   name: 'Rich Shoemaker',
@@ -35,6 +35,21 @@ Organization organization = Organization(
   location: '1600 Amphitheatre Parkway, Mountain View, CA 94043',
   phone: '+1 555-555-5555',
   email: 'support@google.com',
+);
+
+Application application = Application(
+  id: 'string1',
+  jobPositionId: 'jobPositionId',
+  jobTitle: 'QA Tester',
+  organizationName: 'Google',
+  dateApplied: DateTime.now(),
+  dateUpdated: DateTime.now(),
+  status: Status.applied,
+  applicationState: ApplicationState.active,
+  applicationMethod: 'LinkedIn',
+  applicationUrl: 'somewhere.com',
+  resumeId: 'resumeId',
+  coverLetter: 'cover letter text'
 );
 
 class EditApplicationScreen extends StatelessWidget {
@@ -88,15 +103,6 @@ class EditApplicationScreen extends StatelessWidget {
                                   organization.industry!,
                                 ),
                               ),
-
-                              // TextButton(
-                              //   onPressed: () {
-                              //     // UrlUtils.launchEmail(organization.email!);
-                              //   },
-                              //   child: Text(
-                              //     organization.industry!,
-                              //   ),
-                              // ),
                             ),
                           ),
                         ],
@@ -159,6 +165,8 @@ class EditApplicationScreen extends StatelessWidget {
                                                     .showSnackBar(SnackBar(
                                                   content: Text(
                                                       '${organization.email!} coppied to clipboard!'),
+                                                  duration: const Duration(
+                                                      seconds: 1),
                                                 )));
                                       },
                                       child: Text(
@@ -194,6 +202,8 @@ class EditApplicationScreen extends StatelessWidget {
                                               .showSnackBar(SnackBar(
                                             content: Text(
                                                 '${organization.website!} coppied to clipboard!'),
+                                            duration:
+                                                const Duration(seconds: 1),
                                           )));
                                 },
                                 child: Text(
@@ -227,6 +237,8 @@ class EditApplicationScreen extends StatelessWidget {
                                               .showSnackBar(SnackBar(
                                             content: Text(
                                                 '${organization.location!} coppied to clipboard!'),
+                                            duration:
+                                                const Duration(seconds: 1),
                                           )));
                                 },
                                 child: Text(
