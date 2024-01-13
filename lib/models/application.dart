@@ -21,6 +21,11 @@ enum Status {
   String toString() => status;
 }
 
+enum ApplicationState {
+  active,
+  archived,
+}
+
 List<String> applicationMethodsList = <String>[
   'Company Website',
   'LinkedIn',
@@ -39,6 +44,7 @@ class Application {
   final String jobPositionId;
   final String jobTitle;
   final String organizationName;
+  final ApplicationState applicationState;
   final Status status;
   final DateTime dateApplied;
   final DateTime? dateUpdated;
@@ -52,8 +58,9 @@ class Application {
     required this.jobPositionId,
     required this.jobTitle,
     required this.organizationName,
+    this.applicationState = ApplicationState.active,
     required this.dateApplied,
-    this.dateUpdated,
+    required this.dateUpdated,
     this.status = Status.applied,
     this.applicationMethod,
     this.applicationUrl,
@@ -74,9 +81,10 @@ class Application {
       jobPositionId: data['jobPositionId'] ?? '',
       jobTitle: data['jobTitle'] ?? '',
       organizationName: data['organizationName'] ?? '',
-      dateApplied: (data['dateApplied'] as Timestamp?)?.toDate() ?? DateTime.now(),
-      dateUpdated: (data['dateUpdated'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      dateApplied: (data['dateApplied'] as Timestamp?)!.toDate(),
+      dateUpdated: (data['dateUpdated'] as Timestamp?)!.toDate(),
       status: Status.values[data['status']],
+      applicationState: ApplicationState.values[data['applicationState']],
       applicationMethod: data['applicationMethod'],
       applicationUrl: data['applicationUrl'],
       resumeId: data['resumeId'],
@@ -90,8 +98,9 @@ class Application {
       'jobTitle': jobTitle,
       'organizationName': organizationName,
       'status': status.index,
+      'applicationState': applicationState.index,
       'dateApplied': dateApplied,
-      if (dateUpdated != null) 'dateUpdated': dateUpdated,
+      'dateUpdated': dateUpdated,
       if (applicationMethod != null) 'applicationMethod': applicationMethod,
       if (applicationUrl != null) 'applicationUrl': applicationUrl,
       if (resumeId != null) 'resumeId': resumeId,
