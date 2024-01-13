@@ -13,7 +13,6 @@ import 'package:expansion_tile_card/expansion_tile_card.dart';
 final db = FirebaseFirestore.instance;
 final authUid = FirebaseAuth.instance.currentUser!.uid;
 
-final List<String> entries = <String>['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 final List<int> colorCodes = <int>[600, 500, 100];
 List<Map<String, String>> actionItems = [
   {
@@ -113,7 +112,10 @@ class _ApplicationsListState extends State<ApplicationsList> {
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 child: ExpansionTileCard(
                   // key: cardB,
-                  leading: const CircleAvatar(child: Text('B')),
+                  leading: CircleAvatar(
+                    backgroundColor: application.status.color,
+                    child: Text(application.status.symbol),
+                  ),
                   title: ApplicationCardTitle(
                     companyName: application.organizationName,
                     dateUpdated: formatter.format(
