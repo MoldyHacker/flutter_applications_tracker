@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:applications_tracker/models/application.dart';
 import 'package:applications_tracker/widgets/application_card/application_card_contact.dart';
 import 'package:applications_tracker/widgets/application_card/application_card_list_items.dart';
@@ -110,36 +112,59 @@ class _ApplicationsListState extends State<ApplicationsList> {
   // final GlobalKey<ExpansionTileCardState> cardA = GlobalKey();
   // final GlobalKey<ExpansionTileCardState> cardB = GlobalKey();
 
-  bool _retrievingApplications = false;
+  // bool _retrievingApplications = false;
 
-  Future<List<Application>> _getApplications() async {
-    setState(() {
-      _retrievingApplications = true;
-    });
-    QuerySnapshot querySnapshot =
-        await db.collection('users/$authUid/applications').get();
-
-    List<Application> docs = querySnapshot.docs
-        .map((snapshot) => Application.fromFirestore(snapshot as DocumentSnapshot<Map<String, dynamic>>, null))
-        .toList();
-        
-    setState(() {
-      _retrievingApplications = false;
-    });
-    return docs;
+  Stream<List<Application>> getActiveApplicationsStream() {
+    return db
+        .collection('users/$authUid/applications')
+        // .where('applicationState', isEqualTo: ApplicationState.active.index)
+        .orderBy('dateApplied', descending: false)
+        // .orderBy('dateUpdated', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Application.fromFirestore(doc, null))
+            .toList());
   }
 
-  List<Application> applications = [];
+  // Future<List<Application>> _getApplications() async {
+  //   setState(() {
+  //     _retrievingApplications = true;
+  //   });
+  //   List<Application> applications = [];
 
-  @override
-  void initState() {
-    super.initState();
-    _getApplications().then((appList) {
-      setState(() {
-        applications = appList;
-      });
-    });
-  }
+  //   StreamSubscription<QuerySnapshot<Map<String, dynamic>>> querySnapshot = db
+  //       .collection('users/$authUid/applications')
+  //       .where('applicationState', isEqualTo: ApplicationState.active)
+  //       .snapshots()
+  //       .listen((event) {
+  //     event.docs
+  //         .map((snapshot) => applications.add(
+  //             Application.fromFirestore(snapshot, null)));
+  //         // .map((snapshot) => Application.fromFirestore(snapshot, null));
+  //   });
+
+  //   // List<Application> docs = querySnapshot.docs
+  //   //     .map((snapshot) => Application.fromFirestore(
+  //   //         snapshot as DocumentSnapshot<Map<String, dynamic>>, null))
+  //   //     .toList();
+
+  //   setState(() {
+  //     _retrievingApplications = false;
+  //   });
+  //   return docs;
+  // }
+
+  // List<Application> applications = [];
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _getApplications().then((appList) {
+  //     setState(() {
+  //       applications = appList;
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -149,109 +174,142 @@ class _ApplicationsListState extends State<ApplicationsList> {
       ),
     );
 
-    return ListView(
-      children: <Widget>[
-        for (var application in applications)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: ExpansionTileCard(
-              // key: cardB,
-              leading: const CircleAvatar(child: Text('B')),
-              title: ApplicationCardTitle(
-                companyName: application.organizationName,
-                dateUpdated: formatter.format(application.dateUpdated ?? application.dateApplied),
-              ),
-              subtitle: ApplicationCardSubtitle(
-                positionTitle: application.jobTitle,
-                dateApplied: formatter.format(application.dateApplied),
-              ),
-              children: <Widget>[
-                const Divider(
-                  thickness: 1.0,
-                  height: 1.0,
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                      vertical: 8.0,
+    return StreamBuilder<List<Application>>(
+      stream: getActiveApplicationsStream(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator(); // Show loading indicator
+        }
+
+        if (!snapshot.hasData) {
+          return Text('No active applications found');
+        }
+
+        List<Application> applications = snapshot.data!;
+
+        return
+
+            // ListView.builder(
+            //   itemCount: applications.length,
+            //   itemBuilder: (context, index) {
+            //     Application app = applications[index];
+            //     return ListTile(
+            //       title: Text(app.jobTitle),
+            //       subtitle: Text(app.organizationName),
+            //       // other properties...
+            //     );
+            //   },
+            // );
+
+            ListView(
+          children: <Widget>[
+            for (var application in applications)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: ExpansionTileCard(
+                  // key: cardB,
+                  leading: const CircleAvatar(child: Text('B')),
+                  title: ApplicationCardTitle(
+                    companyName: application.organizationName,
+                    dateUpdated: formatter.format(
+                        application.dateUpdated ?? application.dateApplied),
+                  ),
+                  subtitle: ApplicationCardSubtitle(
+                    positionTitle: application.jobTitle,
+                    dateApplied: formatter.format(application.dateApplied),
+                  ),
+                  children: <Widget>[
+                    const Divider(
+                      thickness: 1.0,
+                      height: 1.0,
                     ),
-                    child: Column(
-                      children: [
-                        ApplicationCardContact(
-                          contactName: contact[0]['contactName'] ?? 'Name',
-                          contactTitle: contact[0]['contactTitle'] ?? 'Title',
-                          contactPhone: contact[0]['contactPhone'] ?? 'Phone',
-                          contactEmail: contact[0]['contactEmail'] ?? 'Email',
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 8.0,
                         ),
-                        const SizedBox(height: 10),
-                        ApplicationCardListItems(
-                          listItems: actionItems,
-                          onPressed: () {},
-                          itemHeight: itemHeight,
-                          displayedItems: displayedItems,
+                        child: Column(
+                          children: [
+                            ApplicationCardContact(
+                              contactName: contact[0]['contactName'] ?? 'Name',
+                              contactTitle:
+                                  contact[0]['contactTitle'] ?? 'Title',
+                              contactPhone:
+                                  contact[0]['contactPhone'] ?? 'Phone',
+                              contactEmail:
+                                  contact[0]['contactEmail'] ?? 'Email',
+                            ),
+                            const SizedBox(height: 10),
+                            ApplicationCardListItems(
+                              listItems: actionItems,
+                              onPressed: () {},
+                              itemHeight: itemHeight,
+                              displayedItems: displayedItems,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    ButtonBar(
+                      alignment: MainAxisAlignment.spaceAround,
+                      buttonHeight: 52.0,
+                      buttonMinWidth: 90.0,
+                      children: <Widget>[
+                        TextButton(
+                          style: flatButtonStyle,
+                          onPressed: () {
+                            // cardA.currentState?.expand();
+                          },
+                          child: const Column(
+                            children: <Widget>[
+                              Icon(Icons.note_add_outlined),
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 2.0),
+                              ),
+                              Text('Add Note'),
+                            ],
+                          ),
+                        ),
+                        TextButton(
+                          style: flatButtonStyle,
+                          onPressed: () {
+                            // cardA.currentState?.collapse();
+                          },
+                          child: const Column(
+                            children: <Widget>[
+                              Icon(Icons.edit_outlined),
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 2.0),
+                              ),
+                              Text('Edit'),
+                            ],
+                          ),
+                        ),
+                        TextButton(
+                          style: flatButtonStyle,
+                          onPressed: () {
+                            // cardA.currentState?.toggleExpansion();
+                          },
+                          child: const Column(
+                            children: <Widget>[
+                              Icon(Icons.add_task_outlined),
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 2.0),
+                              ),
+                              Text('Add Action'),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                ),
-                ButtonBar(
-                  alignment: MainAxisAlignment.spaceAround,
-                  buttonHeight: 52.0,
-                  buttonMinWidth: 90.0,
-                  children: <Widget>[
-                    TextButton(
-                      style: flatButtonStyle,
-                      onPressed: () {
-                        // cardA.currentState?.expand();
-                      },
-                      child: const Column(
-                        children: <Widget>[
-                          Icon(Icons.note_add_outlined),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 2.0),
-                          ),
-                          Text('Add Note'),
-                        ],
-                      ),
-                    ),
-                    TextButton(
-                      style: flatButtonStyle,
-                      onPressed: () {
-                        // cardA.currentState?.collapse();
-                      },
-                      child: const Column(
-                        children: <Widget>[
-                          Icon(Icons.edit_outlined),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 2.0),
-                          ),
-                          Text('Edit'),
-                        ],
-                      ),
-                    ),
-                    TextButton(
-                      style: flatButtonStyle,
-                      onPressed: () {
-                        // cardA.currentState?.toggleExpansion();
-                      },
-                      child: const Column(
-                        children: <Widget>[
-                          Icon(Icons.add_task_outlined),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 2.0),
-                          ),
-                          Text('Add Action'),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
-              ],
-            ),
-          ),
-      ],
+              ),
+          ],
+        );
+      },
     );
   }
 }
