@@ -4,7 +4,7 @@ class MapUtils {
 
   MapUtils._();
 
-  static void openMap(double ?latitude, double ?longitude, String ?address) async {
+  static void openMap({double ?latitude, double ?longitude, String ?address}) {
     if (address != null) {
       MapsLauncher.launchQuery(address);
     } else if (latitude != null && longitude != null) {
