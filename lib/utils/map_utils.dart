@@ -1,15 +1,14 @@
-import 'package:url_launcher/url_launcher.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 
 class MapUtils {
 
   MapUtils._();
 
-  static Future<void> openMap(double latitude, double longitude) async {
-    String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
-    if (await canLaunch(googleUrl)) {
-      await launch(googleUrl);
-    } else {
-      throw 'Could not open the map.';
+  static void openMap(double ?latitude, double ?longitude, String ?address) async {
+    if (address != null) {
+      MapsLauncher.launchQuery(address);
+    } else if (latitude != null && longitude != null) {
+      MapsLauncher.launchCoordinates(latitude, longitude);
     }
   }
 }
