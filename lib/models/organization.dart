@@ -7,7 +7,7 @@ class Organization {
   final String? location;
   final String? email;
   final String? website;
-  final String? phoneNumber;
+  final String? phone;
 
   Organization({
     this.id = '',
@@ -16,7 +16,7 @@ class Organization {
     this.location,
     this.email,
     this.website,
-    this.phoneNumber,
+    this.phone,
   });
 
   factory Organization.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options) {
@@ -28,7 +28,7 @@ class Organization {
       location: data['location'],
       email: data['email'],
       website: data['website'],
-      phoneNumber: data['phoneNumber'],
+      phone: data['phone'],
     );
   }
 
@@ -39,7 +39,7 @@ class Organization {
       if (location != null) 'location': location,
       if (email != null) 'email': email,
       if (website != null) 'website': website,
-      if (phoneNumber != null) 'phoneNumber': phoneNumber,
+      if (phone != null) 'phone': phone,
     };
   }
 }
