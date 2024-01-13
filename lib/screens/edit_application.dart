@@ -1,6 +1,7 @@
 import 'package:applications_tracker/models/application.dart';
 import 'package:applications_tracker/models/contact.dart';
 import 'package:applications_tracker/models/organization.dart';
+import 'package:applications_tracker/utils/map_utils.dart';
 import 'package:flutter/material.dart';
 
 List<Contact> contacts = [
@@ -79,14 +80,14 @@ class EditApplicationScreen extends StatelessWidget {
                           Text(organization.industry!),
                         ],
                       ),
-                      if (organization.phone != null)
+                    if (organization.phone != null)
                       Row(
                         children: [
                           const Icon(Icons.phone_outlined),
                           const SizedBox(width: 8),
                           Text(organization.phone!),
                         ],
-                      ),                    
+                      ),
                     if (organization.email != null)
                       Row(
                         children: [
@@ -100,21 +101,27 @@ class EditApplicationScreen extends StatelessWidget {
                         children: [
                           const Icon(Icons.link_outlined),
                           const SizedBox(width: 8),
-                          
                           Text(organization.website!),
                         ],
                       ),
-                    
-                      if (organization.location != null)
+                    if (organization.location != null)
                       Row(
                         children: [
                           const Icon(Icons.location_on_outlined),
                           const SizedBox(width: 8),
                           Expanded(
-                            child: Text(
-                              organization.location!,
-                              maxLines: 2,
+                            child: TextButton(
+                              onPressed: () {MapUtils.openMap(address: organization.location);},
+                              child: Text(
+                                organization.location!,
+                                maxLines: 2,
+                              ),
                             ),
+
+                            // Text(
+                            //   organization.location!,
+                            //   maxLines: 2,
+                            // ),
                           ),
                         ],
                       ),
