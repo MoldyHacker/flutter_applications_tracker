@@ -109,11 +109,6 @@ class ApplicationsList extends StatefulWidget {
 }
 
 class _ApplicationsListState extends State<ApplicationsList> {
-  // final GlobalKey<ExpansionTileCardState> cardA = GlobalKey();
-  // final GlobalKey<ExpansionTileCardState> cardB = GlobalKey();
-
-  // bool _retrievingApplications = false;
-
   Stream<List<Application>> getActiveApplicationsStream() {
     return db
         .collection('users/$authUid/applications')
@@ -125,46 +120,6 @@ class _ApplicationsListState extends State<ApplicationsList> {
             .map((doc) => Application.fromFirestore(doc, null))
             .toList());
   }
-
-  // Future<List<Application>> _getApplications() async {
-  //   setState(() {
-  //     _retrievingApplications = true;
-  //   });
-  //   List<Application> applications = [];
-
-  //   StreamSubscription<QuerySnapshot<Map<String, dynamic>>> querySnapshot = db
-  //       .collection('users/$authUid/applications')
-  //       .where('applicationState', isEqualTo: ApplicationState.active)
-  //       .snapshots()
-  //       .listen((event) {
-  //     event.docs
-  //         .map((snapshot) => applications.add(
-  //             Application.fromFirestore(snapshot, null)));
-  //         // .map((snapshot) => Application.fromFirestore(snapshot, null));
-  //   });
-
-  //   // List<Application> docs = querySnapshot.docs
-  //   //     .map((snapshot) => Application.fromFirestore(
-  //   //         snapshot as DocumentSnapshot<Map<String, dynamic>>, null))
-  //   //     .toList();
-
-  //   setState(() {
-  //     _retrievingApplications = false;
-  //   });
-  //   return docs;
-  // }
-
-  // List<Application> applications = [];
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _getApplications().then((appList) {
-  //     setState(() {
-  //       applications = appList;
-  //     });
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -178,30 +133,16 @@ class _ApplicationsListState extends State<ApplicationsList> {
       stream: getActiveApplicationsStream(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(); // Show loading indicator
+          return const CircularProgressIndicator();
         }
 
         if (!snapshot.hasData) {
-          return Text('No active applications found');
+          return const Text('No active applications found');
         }
 
         List<Application> applications = snapshot.data!;
 
-        return
-
-            // ListView.builder(
-            //   itemCount: applications.length,
-            //   itemBuilder: (context, index) {
-            //     Application app = applications[index];
-            //     return ListTile(
-            //       title: Text(app.jobTitle),
-            //       subtitle: Text(app.organizationName),
-            //       // other properties...
-            //     );
-            //   },
-            // );
-
-            ListView(
+        return ListView(
           children: <Widget>[
             for (var application in applications)
               Padding(
