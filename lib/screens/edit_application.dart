@@ -2,7 +2,9 @@ import 'package:applications_tracker/models/application.dart';
 import 'package:applications_tracker/models/contact.dart';
 import 'package:applications_tracker/models/organization.dart';
 import 'package:applications_tracker/utils/map_utils.dart';
+import 'package:applications_tracker/utils/url_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 List<Contact> contacts = [
   // Contact(
@@ -76,52 +78,164 @@ class EditApplicationScreen extends StatelessWidget {
                       Row(
                         children: [
                           const Icon(Icons.business_outlined),
-                          const SizedBox(width: 8),
-                          Text(organization.industry!),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  organization.industry!,
+                                ),
+                              ),
+
+                              // TextButton(
+                              //   onPressed: () {
+                              //     // UrlUtils.launchEmail(organization.email!);
+                              //   },
+                              //   child: Text(
+                              //     organization.industry!,
+                              //   ),
+                              // ),
+                            ),
+                          ),
                         ],
                       ),
-                    if (organization.phone != null)
-                      Row(
-                        children: [
-                          const Icon(Icons.phone_outlined),
-                          const SizedBox(width: 8),
-                          Text(organization.phone!),
-                        ],
-                      ),
-                    if (organization.email != null)
-                      Row(
-                        children: [
-                          const Icon(Icons.email_outlined),
-                          const SizedBox(width: 8),
-                          Text(organization.email!),
-                        ],
-                      ),
+                    Row(
+                      children: [
+                        if (organization.phone != null)
+                          Expanded(
+                            child: Row(
+                              children: [
+                                const Icon(Icons.phone_outlined),
+                                const SizedBox(width: 4),
+                                Expanded(
+                                  child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: TextButton(
+                                      onPressed: () {
+                                        // UrlUtils.launchEmail(organization.email!);
+                                      },
+                                      onLongPress: () {
+                                        Clipboard.setData(ClipboardData(
+                                                text: organization.phone!))
+                                            .then((value) =>
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      '${organization.phone!} coppied to clipboard!'),
+                                                  duration: const Duration(
+                                                      seconds: 1),
+                                                )));
+                                      },
+                                      child: Text(
+                                        organization.phone!,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        if (organization.email != null)
+                          Expanded(
+                            child: Row(
+                              children: [
+                                const Icon(Icons.email_outlined),
+                                const SizedBox(width: 4),
+                                Expanded(
+                                  child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: TextButton(
+                                      onPressed: () {
+                                        UrlUtils.launchEmail(
+                                            organization.email!);
+                                      },
+                                      onLongPress: () {
+                                        Clipboard.setData(ClipboardData(
+                                                text: organization.email!))
+                                            .then((value) =>
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      '${organization.email!} coppied to clipboard!'),
+                                                )));
+                                      },
+                                      child: Text(
+                                        organization.email!,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
                     if (organization.website != null)
                       Row(
                         children: [
                           const Icon(Icons.link_outlined),
-                          const SizedBox(width: 8),
-                          Text(organization.website!),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              child: TextButton(
+                                onPressed: () {
+                                  UrlUtils.launchWebUrl(organization.website!);
+                                },
+                                onLongPress: () {
+                                  Clipboard.setData(ClipboardData(
+                                          text: organization.website!))
+                                      .then((value) =>
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                '${organization.website!} coppied to clipboard!'),
+                                          )));
+                                },
+                                child: Text(
+                                  organization.website!,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     if (organization.location != null)
                       Row(
                         children: [
                           const Icon(Icons.location_on_outlined),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 4),
                           Expanded(
-                            child: TextButton(
-                              onPressed: () {MapUtils.openMap(address: organization.location);},
-                              child: Text(
-                                organization.location!,
-                                maxLines: 2,
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              child: TextButton(
+                                onPressed: () {
+                                  MapUtils.openMap(
+                                      address: organization.location);
+                                },
+                                onLongPress: () {
+                                  Clipboard.setData(ClipboardData(
+                                          text: organization.location!))
+                                      .then((value) =>
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                '${organization.location!} coppied to clipboard!'),
+                                          )));
+                                },
+                                child: Text(
+                                  organization.location!,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ),
-
-                            // Text(
-                            //   organization.location!,
-                            //   maxLines: 2,
-                            // ),
                           ),
                         ],
                       ),
