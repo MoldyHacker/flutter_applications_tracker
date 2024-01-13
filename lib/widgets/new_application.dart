@@ -22,6 +22,7 @@ class NewApplication extends StatefulWidget {
 
 class _NewApplicationState extends State<NewApplication> {
   final _formKey = GlobalKey<FormState>();
+  var _isValidatingAndUploading = false;
 
   final _organizationNameController = TextEditingController();
   bool _organizationNameIsValid = true;
@@ -74,18 +75,15 @@ class _NewApplicationState extends State<NewApplication> {
 
   // Retrieve the organization document id if it exists, otherwise add it
   Future<String> _getOrganizationDocumentId() async {
-    String? documentId;
-    db
+    var querySnapshot = await db
         .collection('users/$authUid/organizations')
-        .where('name', isEqualTo: _organizationNameController.text)
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      documentId = querySnapshot.docs.firstOrNull?.id;
-    });
-    if (documentId == null) {
+        .where('name', isEqualTo: _organizationNameController.text.trim())
+        .get();
+    if (querySnapshot.docs.isEmpty) {
       return _addOrganization();
+    } else {
+      return querySnapshot.docs.first.id;
     }
-    return documentId!;
   }
 
   // Add the organization to the database and return the document id
@@ -153,7 +151,9 @@ class _NewApplicationState extends State<NewApplication> {
   Future<String?> _validateFormAndAddApplication() async {
     String helpText = 'Please fill in all required fields. \n\n';
     bool formIsValid = true;
-
+    setState(() {
+      _isValidatingAndUploading = true;
+    });
     if (_organizationNameController.text.length < 3 ||
         _organizationNameController.text.length > 50) {
       _organizationNameIsValid = false;
@@ -180,6 +180,9 @@ class _NewApplicationState extends State<NewApplication> {
           ],
         ),
       );
+      setState(() {
+        _isValidatingAndUploading = false;
+      });
       return null;
     }
     return await _addApplication();
@@ -505,7 +508,9 @@ class _NewApplicationState extends State<NewApplication> {
                         ElevatedButton(
                           onPressed: details.onStepContinue,
                           child: _currentStep == _getSteps().length - 1
-                              ? const Text('Finish')
+                              ? _isValidatingAndUploading
+                                  ? const CircularProgressIndicator.adaptive()
+                                  : const Text('Finish')
                               : const Text('Next'),
                         ),
                       ],
