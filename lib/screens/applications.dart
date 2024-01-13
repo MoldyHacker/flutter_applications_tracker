@@ -2,8 +2,12 @@ import 'package:applications_tracker/models/application.dart';
 import 'package:applications_tracker/widgets/applications_list.dart';
 import 'package:applications_tracker/widgets/main_drawer.dart';
 import 'package:applications_tracker/widgets/new_application.dart';
-// import 'package:applications_tracker/widgets/test.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+final db = FirebaseFirestore.instance;
+final authUid = FirebaseAuth.instance.currentUser!.uid;
 
 class ApplicationsScreen extends StatefulWidget {
   const ApplicationsScreen({super.key});
@@ -13,6 +17,36 @@ class ApplicationsScreen extends StatefulWidget {
 }
 
 class _ApplicationsScreenState extends State<ApplicationsScreen> {
+  final List<Application> _activeApplications = [];
+  final List<Application> _archivedApplications = [];
+
+  var _retrievingApplications = false;
+
+  List<Application> _getApplications() {
+    setState(() {
+      _retrievingApplications = true;
+    });
+    db.collection('users/$authUid/applications').get().then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+        print(result.data());
+        // setState(() {
+        //   _activeApplications.add(Application(
+        //     id: result.data()['id'],
+        //     company: result.data()['company'],
+        //     position: result.data()['position'],
+        //     dateApplied: result.data()['dateApplied'],
+        //     status: result.data()['status'],
+        //     notes: result.data()['notes'],
+        //   ));
+        // });
+      });
+    });
+    setState(() {
+      _retrievingApplications = false;
+    });
+    return _activeApplications;
+  }
+
   void _setScreen(String identifier) async {
     Navigator.of(context).pop();
   }
