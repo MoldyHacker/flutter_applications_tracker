@@ -51,6 +51,8 @@
 		<string>tel</string>
 		<string>http</string>
 		<string>https</string>
+		<string>googlechromes</string>
+    	<string>comgooglemaps</string>
 	</array>
 </dict>
 </plist>
