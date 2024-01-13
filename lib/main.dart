@@ -67,6 +67,10 @@ class MainApp extends StatelessWidget {
             foregroundColor: kDarkColorScheme.onPrimaryContainer,
           ),
         ),
+        snackBarTheme: SnackBarThemeData(
+          backgroundColor: kDarkColorScheme.surfaceVariant,
+          contentTextStyle: TextStyle(color: kDarkColorScheme.onSurfaceVariant)
+        )
       ),
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
