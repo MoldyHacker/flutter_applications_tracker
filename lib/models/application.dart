@@ -1,21 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 final formatter = DateFormat.yMd();
 
 enum Status {
-  applied('Applied'),
-  interviewing('Interviewing'),
-  offered('Offered'),
-  rejected('Rejected'),
-  accepted('Accepted'),
-  withdrawn('Withdrawn'),
-  negotiating('Negotiating'),
-  drafted('Drafted');
+  applied('Applied', 'A', Colors.blue),
+  interviewing('Interviewing', 'I', Colors.green),
+  offered('Offered', 'O', Colors.orange),
+  rejected('Rejected', 'R', Colors.red),
+  accepted('Accepted', 'A', Colors.green),
+  withdrawn('Withdrawn', 'W', Colors.red),
+  negotiating('Negotiating', 'N', Colors.orange),
+  drafted('Drafted', 'D', Colors.purple);
 
-  const Status(this.status);
+  const Status(this.status, this.symbol, this.color);
 
   final String status;
+  final String symbol;
+  final Color color;
 
   @override
   String toString() => status;
