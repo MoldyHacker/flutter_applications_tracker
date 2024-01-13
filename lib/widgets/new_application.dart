@@ -135,6 +135,7 @@ class _NewApplicationState extends State<NewApplication> {
       jobTitle: _positionTitleController.text.trim(),
       organizationName: _organizationNameController.text.trim(),
       dateApplied: _dateApplied!,
+      dateUpdated: _dateApplied!,
       applicationMethod: _applicationMethodController.text.isNotEmpty
           ? _applicationMethodController.text.trim()
           : null,
