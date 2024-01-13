@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
+final formatter = DateFormat.yMd();
+
 enum Status {
   applied('Applied'),
   interviewing('Interviewing'),
@@ -32,8 +34,6 @@ List<String> applicationMethodsList = <String>[
   'Other'
 ];
 
-final formatter = DateFormat.yMd();
-
 class Application {
   final String id;
   final String jobPositionId;
@@ -41,6 +41,7 @@ class Application {
   final String organizationName;
   final Status status;
   final DateTime dateApplied;
+  final DateTime? dateUpdated;
   final String? applicationMethod;
   final String? applicationUrl;
   final String? resumeId;
@@ -52,6 +53,7 @@ class Application {
     required this.jobTitle,
     required this.organizationName,
     required this.dateApplied,
+    this.dateUpdated,
     this.status = Status.applied,
     this.applicationMethod,
     this.applicationUrl,
@@ -72,7 +74,8 @@ class Application {
       jobPositionId: data['jobPositionId'] ?? '',
       jobTitle: data['jobTitle'] ?? '',
       organizationName: data['organizationName'] ?? '',
-      dateApplied: data['dateApplied'].toDate() ?? '',
+      dateApplied: (data['dateApplied'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      dateUpdated: (data['dateUpdated'] as Timestamp?)?.toDate() ?? DateTime.now(),
       status: Status.values[data['status']],
       applicationMethod: data['applicationMethod'],
       applicationUrl: data['applicationUrl'],
@@ -86,8 +89,9 @@ class Application {
       'jobPositionId': jobPositionId,
       'jobTitle': jobTitle,
       'organizationName': organizationName,
-      'dateApplied': dateApplied,
       'status': status.index,
+      'dateApplied': dateApplied,
+      if (dateUpdated != null) 'dateUpdated': dateUpdated,
       if (applicationMethod != null) 'applicationMethod': applicationMethod,
       if (applicationUrl != null) 'applicationUrl': applicationUrl,
       if (resumeId != null) 'resumeId': resumeId,
