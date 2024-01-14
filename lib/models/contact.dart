@@ -26,6 +26,8 @@ class Contact {
   final String? linkedInUrl;
   final String? organizationId;
   final String? organizationName;
+  final bool? isPrimary;
+  final bool? isReferral;
 
   Contact({
     this.id = '',
@@ -36,6 +38,8 @@ class Contact {
     this.linkedInUrl,
     this.organizationId,
     this.organizationName,
+    this.isPrimary,
+    this.isReferral,
   });
 
   factory Contact.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -50,6 +54,8 @@ class Contact {
       linkedInUrl: data['linkedInUrl'],
       organizationId: data['organizationId'],
       organizationName: data['organizationName'],
+      isPrimary: data['isPrimary'],
+      isReferral: data['isReferral'],
     );
   }
 
@@ -62,6 +68,8 @@ class Contact {
       if (linkedInUrl != null) 'linkedInUrl': linkedInUrl,
       if (organizationId != null) 'organizationId': organizationId,
       if (organizationName != null) 'organizationName': organizationName,
+      if (isPrimary != null) 'isPrimary': isPrimary,
+      if (isReferral != null) 'isReferral': isReferral,
     };
   }
 }

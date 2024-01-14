@@ -15,6 +15,7 @@ List<Contact> contacts = [
     phone: '+1 555-555-5555',
     organizationId: 'stringText',
     organizationName: 'Google',
+    isPrimary: true,
   ),
   Contact(
     id: '2',
@@ -24,6 +25,7 @@ List<Contact> contacts = [
     phone: '+1 555-555-5555',
     organizationId: 'stringText',
     organizationName: 'Google',
+    isReferral: true,
   ),
 ];
 
@@ -38,18 +40,19 @@ Organization organization = Organization(
 );
 
 Application application = Application(
-    id: 'string1',
-    jobPositionId: 'jobPositionId',
-    jobTitle: 'QA Tester',
-    organizationName: 'Google',
-    dateApplied: DateTime.now(),
-    dateUpdated: DateTime.now(),
-    status: Status.applied,
-    applicationState: ApplicationState.active,
-    applicationMethod: 'LinkedIn',
-    applicationUrl: 'somewhere.com',
-    resumeId: 'resumeId',
-    coverLetter: 'cover letter text');
+  id: 'string1',
+  jobPositionId: 'jobPositionId',
+  jobTitle: 'QA Tester',
+  organizationName: 'Google',
+  dateApplied: DateTime.now(),
+  dateUpdated: DateTime.now(),
+  status: Status.applied,
+  applicationState: ApplicationState.active,
+  applicationMethod: 'LinkedIn',
+  applicationUrl: 'somewhere.com',
+  resumeId: 'resumeId',
+  coverLetter: 'cover letter text',
+);
 
 class EditApplicationScreen extends StatelessWidget {
   const EditApplicationScreen({super.key});
@@ -302,23 +305,45 @@ class EditApplicationScreen extends StatelessWidget {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                '${contact.name}: ',
-                                                style: TextStyle(
-                                                  fontSize: Theme.of(context)
-                                                      .textTheme
-                                                      .titleMedium!
-                                                      .fontSize,
-                                                  fontWeight: Theme.of(context)
-                                                      .textTheme
-                                                      .titleMedium!
-                                                      .fontWeight,
-                                                ),
+                                              Row(
+                                                children: [
+                                                  if (contact.isPrimary == true)
+                                                    const Icon(
+                                                      Icons.star,
+                                                      size: 20,
+                                                      color: Colors.yellow,
+                                                    ),
+                                                  Text(
+                                                    contact.name,
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          Theme.of(context)
+                                                              .textTheme
+                                                              .titleMedium!
+                                                              .fontSize,
+                                                      fontWeight:
+                                                          Theme.of(context)
+                                                              .textTheme
+                                                              .titleMedium!
+                                                              .fontWeight,
+                                                    ),
+                                                  ),
+                                                  if (contact.isReferral ==
+                                                      true)
+                                                    const Text(' - Referral'),
+                                                ],
                                               ),
-                                              if (contact.title != null)
+                                              if (contact.title != null ||
+                                                  contact.organizationName !=
+                                                      null)
                                                 Row(
                                                   children: [
                                                     const SizedBox(width: 12),
+                                                    if (contact
+                                                            .organizationName !=
+                                                        null)
+                                                      Text(
+                                                          '${contact.organizationName!}: '),
                                                     Text(
                                                       contact.title!,
                                                       overflow:
@@ -345,8 +370,7 @@ class EditApplicationScreen extends StatelessWidget {
                                                         child: TextButton(
                                                           onPressed: () {
                                                             UrlUtils.launchEmail(
-                                                                contact
-                                                                    .email!);
+                                                                contact.email!);
                                                           },
                                                           onLongPress: () {
                                                             Clipboard.setData(
@@ -358,15 +382,15 @@ class EditApplicationScreen extends StatelessWidget {
                                                                             context)
                                                                         .showSnackBar(
                                                                             SnackBar(
-                                                                      content:
-                                                                          Text('${contact.email!} coppied to clipboard!'),
-                                                                      duration:
-                                                                          const Duration(seconds: 1),
+                                                                      content: Text(
+                                                                          '${contact.email!} coppied to clipboard!'),
+                                                                      duration: const Duration(
+                                                                          seconds:
+                                                                              1),
                                                                     )));
                                                           },
                                                           child: Text(
-                                                            organization
-                                                                .email!,
+                                                            organization.email!,
                                                             maxLines: 1,
                                                             overflow:
                                                                 TextOverflow
