@@ -16,15 +16,15 @@ List<Contact> contacts = [
     organizationId: 'stringText',
     organizationName: 'Google',
   ),
-  // Contact(
-  //   id: '2',
-  //   name: 'Rich Shoemaker',
-  //   title: 'Lead Developer',
-  //   email: 'example@example.com',
-  //   phone: '+1 555-555-5555',
-  //   organizationId: 'stringText',
-  //   organizationName: 'Google',
-  // ),
+  Contact(
+    id: '2',
+    name: 'Rich Shoemaker',
+    title: 'Lead Developer',
+    email: 'example@example.com',
+    phone: '+1 555-555-5555',
+    organizationId: 'stringText',
+    organizationName: 'Google',
+  ),
 ];
 
 Organization organization = Organization(
@@ -38,24 +38,23 @@ Organization organization = Organization(
 );
 
 Application application = Application(
-  id: 'string1',
-  jobPositionId: 'jobPositionId',
-  jobTitle: 'QA Tester',
-  organizationName: 'Google',
-  dateApplied: DateTime.now(),
-  dateUpdated: DateTime.now(),
-  status: Status.applied,
-  applicationState: ApplicationState.active,
-  applicationMethod: 'LinkedIn',
-  applicationUrl: 'somewhere.com',
-  resumeId: 'resumeId',
-  coverLetter: 'cover letter text'
-);
+    id: 'string1',
+    jobPositionId: 'jobPositionId',
+    jobTitle: 'QA Tester',
+    organizationName: 'Google',
+    dateApplied: DateTime.now(),
+    dateUpdated: DateTime.now(),
+    status: Status.applied,
+    applicationState: ApplicationState.active,
+    applicationMethod: 'LinkedIn',
+    applicationUrl: 'somewhere.com',
+    resumeId: 'resumeId',
+    coverLetter: 'cover letter text');
 
 class EditApplicationScreen extends StatelessWidget {
-  const EditApplicationScreen({super.key, required this.application});
+  const EditApplicationScreen({super.key});
 
-  final Application application;
+  // final Application application;
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +71,6 @@ class EditApplicationScreen extends StatelessWidget {
           child: Column(
             children: [
               const Text('Edit Status'),
-              const Text('Edit Organization'),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16.0,
@@ -338,19 +336,81 @@ class EditApplicationScreen extends StatelessWidget {
                                                 if (contact.email != null)
                                                   Row(
                                                     children: [
-                                                      Icon(ContactMethod
-                                                          .email.icon),
-                                                      const SizedBox(width: 8),
-                                                      Text(contact.email!),
+                                                      const Icon(
+                                                          Icons.email_outlined),
+                                                      const SizedBox(width: 4),
+                                                      Container(
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                        child: TextButton(
+                                                          onPressed: () {
+                                                            UrlUtils.launchEmail(
+                                                                contact
+                                                                    .email!);
+                                                          },
+                                                          onLongPress: () {
+                                                            Clipboard.setData(
+                                                                    ClipboardData(
+                                                                        text: contact
+                                                                            .email!))
+                                                                .then((value) =>
+                                                                    ScaffoldMessenger.of(
+                                                                            context)
+                                                                        .showSnackBar(
+                                                                            SnackBar(
+                                                                      content:
+                                                                          Text('${contact.email!} coppied to clipboard!'),
+                                                                      duration:
+                                                                          const Duration(seconds: 1),
+                                                                    )));
+                                                          },
+                                                          child: Text(
+                                                            organization
+                                                                .email!,
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                        ),
+                                                      ),
                                                     ],
                                                   ),
                                                 if (contact.phone != null)
                                                   Row(
                                                     children: [
-                                                      Icon(ContactMethod
-                                                          .phone.icon),
-                                                      const SizedBox(width: 8),
-                                                      Text(contact.phone!),
+                                                      const Icon(
+                                                          Icons.phone_outlined),
+                                                      const SizedBox(width: 4),
+                                                      Container(
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                        child: TextButton(
+                                                          onPressed: () {
+                                                            // UrlUtils.launchEmail(organization.email!);
+                                                          },
+                                                          onLongPress: () {
+                                                            Clipboard.setData(
+                                                                    ClipboardData(
+                                                                        text: contact
+                                                                            .phone!))
+                                                                .then((value) =>
+                                                                    ScaffoldMessenger.of(
+                                                                            context)
+                                                                        .showSnackBar(
+                                                                            SnackBar(
+                                                                      content: Text(
+                                                                          '${contact.phone!} coppied to clipboard!'),
+                                                                      duration: const Duration(
+                                                                          seconds:
+                                                                              1),
+                                                                    )));
+                                                          },
+                                                          child: Text(
+                                                            contact.phone!,
+                                                          ),
+                                                        ),
+                                                      ),
                                                     ],
                                                   ),
                                                 if (contact.linkedInUrl != null)

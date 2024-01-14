@@ -185,8 +185,8 @@ class _ApplicationsListState extends State<ApplicationsList> {
                           onPressed: () {
                             // cardA.currentState?.collapse();
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => EditApplicationScreen(
-                                application: application,
+                              builder: (ctx) => const EditApplicationScreen(
+                                // application: application,
                               ),
                             ));
                           },
